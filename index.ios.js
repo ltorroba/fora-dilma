@@ -75,6 +75,51 @@ var styles = StyleSheet.create({
         height: (width-40),
         marginTop: (height - 80) / 2 - (width - 40) / 2 - 30,
         marginLeft: 40 / 2
+    },
+    containerStats: {
+        width: width,
+        height: height,
+        resizeMode: 'contain'
+    },
+    statsBigValue: {
+        margin: 0,
+        marginTop: 5,
+        color: 'white',
+        fontSize: 60,        
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    statsBigLabel: {
+        color: 'white',
+        fontSize: 20,
+        margin: 0,
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    statsValue: {
+        margin: 0,
+        marginTop: 10,
+        color: 'white',
+        fontSize: 40,        
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    statsLabel: {
+        color: 'white',
+        fontSize: 15,
+        margin: 0,
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+    arrowStats: {
+        width: 20,
+        height: 20,
+        marginTop: 30,
+        marginLeft: (width-20)/2
     }
 });
 
@@ -111,29 +156,110 @@ class MainButton extends Component {
     }
 }
 
-class ForaDilmaApp extends Component {
-    constructor() {
+class ArrowButton extends Component {
+    constructor(props) {
         super();
         this.state = {
-            presses: 200000
+            direction: props.dir,
+            route: props.route
         }
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.level}>
-                    <View style={styles.levelHighlight}></View>
-                    <Text style={styles.levelText}>PROTESTANTE MIRIM</Text>
-                </View>
-                <MainButton link={this}/>
-                <View style={styles.hitsContainer}>
-                    <Text style={styles.hitsText}>
-                        {this.state.presses}
-                    </Text>
-                </View>
-            </View>
+            <TouchableWithoutFeedback onPressIn={ () => this.onPress() } >
+                <Image source={ this.state.direction == 'up' ? require('./res/SmallArrow.png') : require('./res/SmallArrowDown.png') } style={styles.arrowStats} />
+            </TouchableWithoutFeedback>
         );
+    }
+
+    onPress() {
+        let newMainState = {...this.props.link.state};
+        newMainState.route = this.state.route;
+        this.props.link.setState(newMainState);
+    }
+}
+
+class ForaDilmaApp extends Component {
+    constructor() {
+        super();
+        this.state = {
+            presses: 200000,
+            route: 'stats'
+        }
+    }
+
+    render() {
+        if(this.state.route === 'main') {
+            return (
+                <View style={styles.container}>
+                    <View style={styles.level}>
+                        <View style={styles.levelHighlight}></View>
+                        <Text style={styles.levelText}>PROTESTANTE MIRIM</Text>
+                    </View>
+
+                    <MainButton link={this}/>
+
+                    <View style={styles.hitsContainer}>
+                        <Text style={styles.hitsText}>
+                            {this.state.presses}
+                        </Text>
+                    </View>
+
+                    <ArrowButton dir={'up'} route={'stats'} link={this}/>
+                </View>
+            );
+        } else if (this.state.route === 'stats') {
+            return (
+                <View style={styles.container}>
+                    <Image source={require('./res/ForasVertical.png')} style={styles.containerStats}>
+                        <ArrowButton dir={'down'} route={'main'} link={this}/>
+
+                        <Text style={styles.statsBigValue}>
+                            200.000
+                        </Text>
+                        <Text style={styles.statsBigLabel}>
+                            TOTAIS
+                        </Text>
+
+                        <Text style={styles.statsValue}>
+                            +7%
+                        </Text>
+                        <Text style={styles.statsLabel}>
+                            NA ÚLTIMA SEMANA
+                        </Text>
+
+                        <Text style={styles.statsValue}>
+                            84
+                        </Text>
+                        <Text style={styles.statsLabel}>
+                            SÓ SEUS
+                        </Text>
+
+                        <Text style={styles.statsValue}>
+                            120
+                        </Text>
+                        <Text style={styles.statsLabel}>
+                            MÉDIA POR PESSOA
+                        </Text>
+
+                        <Text style={styles.statsValue}>
+                            7
+                        </Text>
+                        <Text style={styles.statsLabel}>
+                            POR MINUTO
+                        </Text>
+
+                        <Text style={styles.statsValue}>
+                            28.000
+                        </Text>
+                        <Text style={styles.statsLabel}>
+                            NAS ÚLTIMAS 24H
+                        </Text>
+                    </Image>
+                </View>
+            );
+        }
     }
 }
 
