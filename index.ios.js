@@ -1,4 +1,5 @@
 'use strict';
+import rebound from 'rebound';
 
 var React = require('react-native');
 var {
@@ -8,7 +9,8 @@ var {
     Component,
     Dimensions,
     Image,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    Animated
 } = React;
 
 var ReactART = require('ReactNativeART');
@@ -27,15 +29,19 @@ var {
 var {height, width} = Dimensions.get('window');
 
 var styles = StyleSheet.create({
+    container: {
+        position: 'relative',
+        flex: 1,
+        backgroundColor: '#2c3e50'
+    },
     text: {
         color: 'black',
         fontSize: 30,
         margin: 80
     },
-    container: {
-        position: 'relative',
-        flex: 1,
-        backgroundColor: '#2c3e50'
+    pages: {
+        position: 'absolute',
+        flex: 1
     },
     level: {
         backgroundColor: '#27ae60',
@@ -68,7 +74,7 @@ var styles = StyleSheet.create({
     hitsContainer: {
         position: 'absolute',
         width: width,
-        bottom: 80
+        top: height-140
     },
     button: {
         width: (width-40),
@@ -115,7 +121,15 @@ var styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold'
     },
-    arrowStats: {
+    arrowStatsMain: {
+        position: 'absolute',
+        width: 20,
+        height: 20,
+        top: height - 50,
+        marginLeft: (width-20)/2
+    },
+    arrowStatsStats: {
+        position: 'relative',
         width: 20,
         height: 20,
         marginTop: 30,
@@ -168,7 +182,7 @@ class ArrowButton extends Component {
     render() {
         return (
             <TouchableWithoutFeedback onPressIn={ () => this.onPress() } >
-                <Image source={ this.state.direction == 'up' ? require('./res/SmallArrow.png') : require('./res/SmallArrowDown.png') } style={styles.arrowStats} />
+                <Image source={ this.state.direction == 'up' ? require('./res/SmallArrow.png') : require('./res/SmallArrowDown.png') } style={this.props.style} />
             </TouchableWithoutFeedback>
         );
     }
@@ -190,13 +204,13 @@ class ForaDilmaApp extends Component {
     }
 
     render() {
-        if(this.state.route === 'main') {
-            return (
-                <View style={styles.container}>
-                    <View style={styles.level}>
+        return (
+            <View style={styles.container}>
+                <View style={ this.state.route === 'main' ? ( styles.pages ) : ( styles.pages , { position: 'absolute', top: -height } ) }>
+                    <View style={styles.level}> 
                         <View style={styles.levelHighlight}></View>
                         <Text style={styles.levelText}>PROTESTANTE MIRIM</Text>
-                    </View>
+                    </View> 
 
                     <MainButton link={this}/>
 
@@ -206,14 +220,11 @@ class ForaDilmaApp extends Component {
                         </Text>
                     </View>
 
-                    <ArrowButton dir={'up'} route={'stats'} link={this}/>
+                    <ArrowButton dir={'up'} route={'stats'} link={this} style={styles.arrowStatsMain}/>
                 </View>
-            );
-        } else if (this.state.route === 'stats') {
-            return (
-                <View style={styles.container}>
+                <View style={ this.state.route === 'main' ? ( styles.pages, { position: 'absolute', top: height } ) : ( styles.pages, { position: 'absolute', top: 0 } ) }>
                     <Image source={require('./res/ForasVertical.png')} style={styles.containerStats}>
-                        <ArrowButton dir={'down'} route={'main'} link={this}/>
+                        <ArrowButton dir={'down'} route={'main'} link={this} style={styles.arrowStatsStats}/>
 
                         <Text style={styles.statsBigValue}>
                             200.000
@@ -258,8 +269,9 @@ class ForaDilmaApp extends Component {
                         </Text>
                     </Image>
                 </View>
-            );
-        }
+            </View>
+        );
+        
     }
 }
 
