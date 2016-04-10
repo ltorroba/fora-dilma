@@ -175,7 +175,7 @@ class ArrowButton extends Component {
         super();
         this.state = {
             direction: props.dir,
-            route: props.route
+            offset: props.offset
         }
     }
 
@@ -188,9 +188,7 @@ class ArrowButton extends Component {
     }
 
     onPress() {
-        let newMainState = {...this.props.link.state};
-        newMainState.route = this.state.route;
-        this.props.link.setState(newMainState);
+        this.props.link.spring.setEndValue(this.props.offset);
     }
 }
 
@@ -199,14 +197,30 @@ class ForaDilmaApp extends Component {
         super();
         this.state = {
             presses: 200000,
-            route: 'stats'
+            verticalOffset: 0,
         }
+    }
+
+    componentWillMount() {
+        this.springSystem = new rebound.SpringSystem();
+        this.spring = this.springSystem.createSpring();
+
+        this.spring.getSpringConfig().tension = 230;
+        this.spring.getSpringConfig().friction = 10;
+
+        this.spring.addListener({
+            onSpringUpdate: () => {
+                this.setState({ verticalOffset: this.spring.getCurrentValue() });
+            },
+        });
+
+        this.spring.setCurrentValue(0);
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <View style={ this.state.route === 'main' ? ( styles.pages ) : ( styles.pages , { position: 'absolute', top: -height } ) }>
+                <View style={{ position: 'absolute', top: -this.state.verticalOffset }}>
                     <View style={styles.level}> 
                         <View style={styles.levelHighlight}></View>
                         <Text style={styles.levelText}>PROTESTANTE MIRIM</Text>
@@ -220,11 +234,11 @@ class ForaDilmaApp extends Component {
                         </Text>
                     </View>
 
-                    <ArrowButton dir={'up'} route={'stats'} link={this} style={styles.arrowStatsMain}/>
+                    <ArrowButton dir={'up'} offset={height} link={this} style={styles.arrowStatsMain} />
                 </View>
-                <View style={ this.state.route === 'main' ? ( styles.pages, { position: 'absolute', top: height } ) : ( styles.pages, { position: 'absolute', top: 0 } ) }>
+                <View style={{ position: 'absolute', top: height - this.state.verticalOffset }}>
                     <Image source={require('./res/ForasVertical.png')} style={styles.containerStats}>
-                        <ArrowButton dir={'down'} route={'main'} link={this} style={styles.arrowStatsStats}/>
+                        <ArrowButton dir={'down'} offset={0} link={this} style={styles.arrowStatsStats} />
 
                         <Text style={styles.statsBigValue}>
                             200.000
