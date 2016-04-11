@@ -10,7 +10,8 @@ var {
     Dimensions,
     Image,
     TouchableWithoutFeedback,
-    Animated
+    Animated,
+    Easing
 } = React;
 
 var ReactART = require('ReactNativeART');
@@ -188,7 +189,10 @@ class ArrowButton extends Component {
     }
 
     onPress() {
-        this.props.link.spring.setEndValue(this.props.offset);
+        Animated.spring(this.props.link.state.verticalOffset, {
+            toValue: this.props.offset,
+            easing: Easing.linear
+        }).start();
     }
 }
 
@@ -197,30 +201,18 @@ class ForaDilmaApp extends Component {
         super();
         this.state = {
             presses: 200000,
-            verticalOffset: 0,
+            verticalOffset: new Animated.Value(0)
         }
     }
 
     componentWillMount() {
-        this.springSystem = new rebound.SpringSystem();
-        this.spring = this.springSystem.createSpring();
-
-        this.spring.getSpringConfig().tension = 230;
-        this.spring.getSpringConfig().friction = 10;
-
-        this.spring.addListener({
-            onSpringUpdate: () => {
-                this.setState({ verticalOffset: this.spring.getCurrentValue() });
-            },
-        });
-
-        this.spring.setCurrentValue(0);
+        this.state.verticalOffset.setValue(0);
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <View style={{ position: 'absolute', top: -this.state.verticalOffset }}>
+                <Animated.View style={{ position: 'absolute', top: this.state.verticalOffset.interpolate({ inputRange: [0, 1], outputRange: [0, -height] })}}>
                     <View style={styles.level}> 
                         <View style={styles.levelHighlight}></View>
                         <Text style={styles.levelText}>PROTESTANTE MIRIM</Text>
@@ -234,9 +226,9 @@ class ForaDilmaApp extends Component {
                         </Text>
                     </View>
 
-                    <ArrowButton dir={'up'} offset={height} link={this} style={styles.arrowStatsMain} />
-                </View>
-                <View style={{ position: 'absolute', top: height - this.state.verticalOffset }}>
+                    <ArrowButton dir={'up'} offset={1} link={this} style={styles.arrowStatsMain} />
+                </Animated.View>
+                <Animated.View style={{ position: 'absolute', top: this.state.verticalOffset.interpolate({ inputRange: [0, 1], outputRange: [height, 0] })}}>
                     <Image source={require('./res/ForasVertical.png')} style={styles.containerStats}>
                         <ArrowButton dir={'down'} offset={0} link={this} style={styles.arrowStatsStats} />
 
@@ -282,7 +274,7 @@ class ForaDilmaApp extends Component {
                             NAS ÚLTIMAS 24H
                         </Text>
                     </Image>
-                </View>
+                </Animated.View>
             </View>
         );
         
