@@ -171,7 +171,11 @@ const makePannable = BaseComponent => {
                 absoluteChangeX: 0,
                 absoluteChangeY: 0,
                 changeX: 0,
-                changeY: 0
+                changeY: 0,
+                velocityX: 0,
+                velocityY: 0,
+                absoluteX: 0,
+                absoluteY: 0
             };
         }
 
@@ -196,14 +200,18 @@ const makePannable = BaseComponent => {
                     return touches.length === 1;
                 },
 
-                onPanResponderMove: (evt, {dx, dy}) => {
+                onPanResponderMove: (evt, {dx, dy, vx, vy, moveX, moveY}) => {
                     const { onPan } = this.props;
 
                     const newState = {
                         absoluteChangeX: this.lastX + dx,
                         absoluteChangeY: this.lastY + dy,
                         changeX: dx,
-                        changeY: dy
+                        changeY: dy,
+                        velocityX: vx,
+                        velocityY: vy,
+                        absoluteX: moveX,
+                        absoluteY: moveY
                     }
 
                     this.setState(newState);
@@ -218,13 +226,26 @@ const makePannable = BaseComponent => {
             });
         }
 
-        handlePanResponderRelease = () => {
+        handlePanResponderRelease = (evt, {dx, dy, vx, vy, moveX, moveY}) => {
             const { onPanEnd } = this.props;
 
             this.lastX = this.state.absoluteChangeX;
             this.lastY = this.state.absoluteChangeY;
 
-            onPanEnd && onPanEnd();
+            const newState = {
+                absoluteChangeX: this.lastX + dx,
+                absoluteChangeY: this.lastY + dy,
+                changeX: dx,
+                changeY: dy,
+                velocityX: vx,
+                velocityY: vy,
+                absoluteX: moveX,
+                absoluteY: moveY
+            }
+
+            this.setState(newState);
+
+            onPanEnd && onPanEnd(newState);
         }
 
         render() {
@@ -255,7 +276,8 @@ class ArrowButton extends Component {
 
         this.state = {
             direction: props.dir,
-            offset: props.offset
+            fallback: props.fallback,
+            target: props.target
         }
     }
 
@@ -263,16 +285,25 @@ class ArrowButton extends Component {
         //const { absoluteChangeX, absoluteChangeY, link } = this.props;   
 
         return (
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={ () => this.onPress() }>
                 <Image source={ this.state.direction == 'up' ? require('./res/SmallArrow.png') : require('./res/SmallArrowDown.png') } style={{ width: 20, height: 20 }}/>
             </TouchableWithoutFeedback>
         );
+    }
+
+    onPress() {
+        Animated.spring(this.props.link.state.verticalOffset, {
+            toValue: this.props.target,
+            easing: Easing.linear
+        }).start();
     }
 }
 
 class ForaDilmaApp extends Component {
     constructor() {
         super();
+
+        this.panStart = -1;
         this.state = {
             presses: 200000,
             verticalOffset: new Animated.Value(0)
@@ -283,11 +314,40 @@ class ForaDilmaApp extends Component {
         this.state.verticalOffset.setValue(0);
     }
 
-    _onPan (state) {
-        console.log(state);
-        this.state.verticalOffset.setValue(-state.absoluteChangeY);
+    _onPan (state, pivot) {
+        if(this.panStart <= -1)
+            this.panStart = Date.now();
+
+        this.state.verticalOffset.setValue(pivot - state.changeY);
 
         
+    }
+
+    _onPanEnd (state, fallback, target) {
+        // Simulate button press if small tap is intentionally made instead of a button press
+        if(Date.now() - this.panStart <= 300) {
+            Animated.spring(this.state.verticalOffset, {
+                toValue: target,
+                easing: Easing.linear
+            }).start();
+        }
+
+        console.log(state.velocityY);
+
+        // Trigger transition if pan is strong enough
+        if(Math.abs(state.velocityY) >= 3) {
+            Animated.spring(this.state.verticalOffset, {
+                toValue: target,
+                easing: Easing.linear
+            }).start();
+        } else { // Fallback if transition is weak
+            Animated.spring(this.state.verticalOffset, {
+                toValue: fallback,
+                easing: Easing.linear
+            }).start();
+        }
+
+        this.panStart = -1;
     }
 
     render() {
@@ -307,11 +367,11 @@ class ForaDilmaApp extends Component {
                         </Text>
                     </View>
 
-                    <ArrowButton dir={'up'} offset={1} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state) } />
+                    <ArrowButton dir={'up'} fallback={0} target={height} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state, 0) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
                 </Animated.View>
                 <Animated.View style={{ position: 'absolute', top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [height, 0] })}}>
                     <Image source={require('./res/ForasVertical.png')} style={styles.containerStats}>
-                        <ArrowButton dir={'down'} offset={0} link={this} style={styles.arrowStatsStats} />
+                        <ArrowButton dir={'down'} fallback={height} target={0} link={this} style={styles.arrowStatsStats} onPan={ (state) => this._onPan(state, height) } onPanEnd={ (state) => this._onPanEnd(state, height, 0) } />
 
                         <Text style={styles.statsBigValue}>
                             200.000
