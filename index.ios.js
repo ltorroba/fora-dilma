@@ -17,39 +17,9 @@ var {
 
 var styles = require('./styles.js');
 var MainButton = require('./MainButton.js');
-const makePannable = require('./MakePannable.js');
+var ArrowButton = require('./ArrowButton.js');
 
 var {height, width} = Dimensions.get('window');
-
-@makePannable
-class ArrowButton extends Component {
-    constructor(props) {
-        super();
-
-        this.state = {
-            direction: props.dir,
-            fallback: props.fallback,
-            target: props.target
-        }
-    }
-
-    render() {
-        //const { absoluteChangeX, absoluteChangeY, link } = this.props;   
-
-        return (
-            <TouchableWithoutFeedback onPress={ () => this.onPress() } hitSlop={{top: 50, bottom: 50, right: 50, left: 50}}>
-                <Image source={ this.state.direction == 'up' ? require('./res/SmallArrow.png') : require('./res/SmallArrowDown.png') } style={{ width: 60, height: 60 }}/>
-            </TouchableWithoutFeedback>
-        );
-    }
-
-    onPress() {
-        Animated.spring(this.props.link.state.verticalOffset, {
-            toValue: this.props.target,
-            easing: Easing.linear
-        }).start();
-    }
-}
 
 class ForaDilmaApp extends Component {
     constructor() {
