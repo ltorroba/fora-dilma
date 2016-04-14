@@ -7,10 +7,11 @@ var {
     View,
     Dimensions,
     Text,
-    Image
+    Image,
+    Easing
 } = React;
 
-var styles = require('./styles.js');
+import styles from './styles';
 var MainButton = require('./MainButton.js');
 var ArrowButton = require('./ArrowButton.js');
 

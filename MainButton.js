@@ -7,7 +7,7 @@ var {
     Image
 } = React;
 
-var styles = require('./styles.js');
+import styles from './styles';
 
 class MainButton extends Component {
     constructor() {
