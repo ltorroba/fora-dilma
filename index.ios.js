@@ -196,8 +196,12 @@ const makePannable = BaseComponent => {
                     return shouldSet;
                 },
 
-                onMoveShouldSetPanResponder: ({ nativeEvent: { touches } }) => {
-                    return touches.length === 1;
+                onMoveShouldSetPanResponder: (evt, gestureState ) => {
+                    return gestureState.dx != 0 && gestureState.dy != 0 && evt.touches.length === 1;
+                },
+
+                onMoveShouldSetPanResponderCapture: (evt, gestureState ) => {
+                    return gestureState.dx != 0 && gestureState.dy != 0;
                 },
 
                 onPanResponderMove: (evt, {dx, dy, vx, vy, moveX, moveY}) => {
@@ -285,8 +289,8 @@ class ArrowButton extends Component {
         //const { absoluteChangeX, absoluteChangeY, link } = this.props;   
 
         return (
-            <TouchableWithoutFeedback onPress={ () => this.onPress() }>
-                <Image source={ this.state.direction == 'up' ? require('./res/SmallArrow.png') : require('./res/SmallArrowDown.png') } style={{ width: 20, height: 20 }}/>
+            <TouchableWithoutFeedback onPress={ () => this.onPress() } hitSlop={{top: 50, bottom: 50, right: 50, left: 50}}>
+                <Image source={ this.state.direction == 'up' ? require('./res/SmallArrow.png') : require('./res/SmallArrowDown.png') } style={{ width: 60, height: 60 }}/>
             </TouchableWithoutFeedback>
         );
     }
@@ -325,14 +329,12 @@ class ForaDilmaApp extends Component {
 
     _onPanEnd (state, fallback, target) {
         // Simulate button press if small tap is intentionally made instead of a button press
-        if(Date.now() - this.panStart <= 300) {
+        if(Date.now() - this.panStart <= 1000) {
             Animated.spring(this.state.verticalOffset, {
                 toValue: target,
                 easing: Easing.linear
             }).start();
         }
-
-        console.log(state.velocityY);
 
         // Trigger transition if pan is strong enough
         if(Math.abs(state.velocityY) >= 3) {
