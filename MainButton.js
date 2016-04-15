@@ -9,7 +9,7 @@ var {
 
 var Sound = require('react-native-sound');
 
-var ForaShout = new Sound('Fora.mp3', Sound.MAIN_BUNDLE, (error) => {
+var ForaShout = new Sound('fora.mp3', Sound.MAIN_BUNDLE, (error) => {
     if(error) {
         console.log('Failed to load sound', error);
     } else {

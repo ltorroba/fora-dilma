@@ -22,7 +22,3 @@ allprojects {
         }
     }
 }
-
-dependencies {
-  compile project(':RNSound')
-}
