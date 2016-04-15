@@ -33,6 +33,7 @@ class MainButton extends Component {
 
         if(s && !this.state.pressed) {
             newMainState.presses++;
+            newMainState.queuedPresses++;
         }
 
         this.forceUpdate();

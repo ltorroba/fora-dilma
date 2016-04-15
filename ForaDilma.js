@@ -24,12 +24,54 @@ class ForaDilma extends Component {
         this.panStart = -1;
         this.state = {
             presses: 200000,
-            verticalOffset: new Animated.Value(0)
+            verticalOffset: new Animated.Value(0),
+            queuedPresses: 0
         }
+
     }
 
     componentWillMount() {
+        // Initial sync
+        this.sync(this);
+
         this.state.verticalOffset.setValue(0);
+        setInterval(this.sync, 3000, this);
+    }
+
+    async sync(scope) {
+        console.log("syncing...");
+        console.log(scope.state.queuedPresses);
+
+        // Transfer current presses to temporary store
+        var temp = scope.state.queuedPresses;
+
+        // Reset queue
+        let newState = {...scope.state};
+        newState.queuedPresses = 0;
+        scope.setState(newState);
+
+        fetch('http://localhost/fora-dilma-server/sync.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                queuedPresses: temp
+            })
+        })
+        .then((response) => response.text())
+        .then((responseText) => {
+            // Update counter, taking into consideration any queued presses
+            let newState = {...scope.state};
+            newState.presses = parseInt(JSON.parse(responseText).presses) + newState.queuedPresses;
+            scope.setState(newState);
+        })
+        .catch((error) => {
+            console.warn(error);
+        });
+
+
     }
 
     _onPan (state, pivot) {
@@ -38,7 +80,6 @@ class ForaDilma extends Component {
 
         this.state.verticalOffset.setValue(pivot - state.changeY);
 
-        
     }
 
     _onPanEnd (state, fallback, target) {
