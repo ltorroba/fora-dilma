@@ -12,9 +12,10 @@ var {
 } = React;
 
 import styles from './styles';
-var MainButton = require('./MainButton.js');
-var ArrowButton = require('./ArrowButton.js');
-var PressCounter = require('./PressCounter.js');
+var MainButton = require('./MainButton');
+var ArrowButton = require('./ArrowButton');
+var PressCounter = require('./PressCounter');
+var Statistics = require('./Statistics');
 
 var { height, width } = Dimensions.get('window');
 
@@ -25,6 +26,7 @@ class ForaDilma extends Component {
         this.panStart = -1;
         this.state = {
             pressCounter: null,
+            statsPane: null,
             verticalOffset: new Animated.Value(0)
         }
 
@@ -34,22 +36,24 @@ class ForaDilma extends Component {
         this.state.verticalOffset.setValue(0);
     }
 
-    setupSync(scope) {
-        // Initial sync
-        this.sync(scope);
+    setupSync() {
+        if(this.state.statsPane && this.state.pressCounter) {
+            // Initial sync
+            this.sync(this.state.pressCounter, this.state.statsPane);
 
-        setInterval(this.sync, 3000, scope);
+            setInterval(this.sync, 3000, this.state.pressCounter, this.state.statsPane);
+        }
     }
 
-    async sync(scope) {
+    async sync(pc, sp) {
         // Transfer current presses to temporary store
-        var temp = scope.state.queuedPresses;
+        var temp = pc.state.queuedPresses;
 
         // Reset queue
-        let newState = {...scope.state};
+        let newState = {...pc.state};
         newState.queuedPresses = 0;
-        scope.setState(newState);
-
+        pc.setState(newState);
+        
         fetch('http://console.zes.me/fora-dilma-server/sync.php', {
             method: 'POST',
             headers: {
@@ -63,9 +67,18 @@ class ForaDilma extends Component {
         .then((response) => response.text())
         .then((responseText) => {
             // Update counter, taking into consideration any queued presses
-            let newState = {...scope.state};
-            newState.presses = parseInt(JSON.parse(responseText).presses) + newState.queuedPresses;
-            scope.setState(newState);
+            let newPcState = {...pc.state};
+            newPcState.presses = parseInt(JSON.parse(responseText).presses) + newPcState.queuedPresses;
+            pc.setState(newPcState);
+
+            // Update stats pane
+            let newSpState = {...sp.state};
+            newSpState.total = parseInt(JSON.parse(responseText).presses);
+            newSpState.week = parseInt(JSON.parse(responseText).week);
+            newSpState.day = parseInt(JSON.parse(responseText).day);
+            newSpState.hour = parseInt(JSON.parse(responseText).hour);
+
+            sp.setState(newSpState);
         })
         .catch((error) => {
             console.warn(error);
@@ -77,7 +90,6 @@ class ForaDilma extends Component {
             this.panStart = Date.now();
 
         this.state.verticalOffset.setValue(pivot - state.changeY);
-
     }
 
     _onPanEnd (state, fallback, target) {
@@ -117,57 +129,13 @@ class ForaDilma extends Component {
                     <MainButton link={this}/>
 
                     <View style={styles.hitsContainer}>
-                        <PressCounter link={this} ref={ c => this.state.pressCounter = c }/>
+                        <PressCounter link={this} ref={ (c) => { this.state.pressCounter = c; this.setupSync(); } }/>
                     </View>
 
                     <ArrowButton dir={'up'} fallback={0} target={height} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state, 0) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
                 </Animated.View>
                 <Animated.View style={{ position: 'absolute', top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [height, 0] })}}>
-                    <Image source={require('./res/ForasVertical.png')} style={styles.containerStats}>
-                        <ArrowButton dir={'down'} fallback={height} target={0} link={this} style={styles.arrowStatsStats} onPan={ (state) => this._onPan(state, height) } onPanEnd={ (state) => this._onPanEnd(state, height, 0) } />
-
-                        <Text style={styles.statsBigValue}>
-                            200.000
-                        </Text>
-                        <Text style={styles.statsBigLabel}>
-                            TOTAIS
-                        </Text>
-
-                        <Text style={styles.statsValue}>
-                            +7%
-                        </Text>
-                        <Text style={styles.statsLabel}>
-                            NA ÚLTIMA SEMANA
-                        </Text>
-
-                        <Text style={styles.statsValue}>
-                            84
-                        </Text>
-                        <Text style={styles.statsLabel}>
-                            SÓ SEUS
-                        </Text>
-
-                        <Text style={styles.statsValue}>
-                            120
-                        </Text>
-                        <Text style={styles.statsLabel}>
-                            MÉDIA POR PESSOA
-                        </Text>
-
-                        <Text style={styles.statsValue}>
-                            7
-                        </Text>
-                        <Text style={styles.statsLabel}>
-                            POR MINUTO
-                        </Text>
-
-                        <Text style={styles.statsValue}>
-                            28.000
-                        </Text>
-                        <Text style={styles.statsLabel}>
-                            NAS ÚLTIMAS 24H
-                        </Text>
-                    </Image>
+                    <Statistics link={this} ref={ (c) => { this.state.statsPane = c; this.setupSync(); } }/>
                 </Animated.View>
             </View>
         );

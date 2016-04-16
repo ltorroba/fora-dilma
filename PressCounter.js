@@ -25,10 +25,6 @@ class PressCounter extends Component {
             </Text>
 		);
 	}
-
-	componentWillMount() {
-		this.props.link.setupSync(this);
-	}
 }
 
 module.exports = PressCounter;
