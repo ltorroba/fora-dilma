@@ -14,6 +14,7 @@ var {
 import styles from './styles';
 var MainButton = require('./MainButton.js');
 var ArrowButton = require('./ArrowButton.js');
+var PressCounter = require('./PressCounter.js');
 
 var { height, width } = Dimensions.get('window');
 
@@ -23,25 +24,24 @@ class ForaDilma extends Component {
 
         this.panStart = -1;
         this.state = {
-            presses: 200000,
-            verticalOffset: new Animated.Value(0),
-            queuedPresses: 0
+            pressCounter: null,
+            verticalOffset: new Animated.Value(0)
         }
 
     }
 
     componentWillMount() {
-        // Initial sync
-        this.sync(this);
-
         this.state.verticalOffset.setValue(0);
-        setInterval(this.sync, 3000, this);
+    }
+
+    setupSync(scope) {
+        // Initial sync
+        this.sync(scope);
+
+        setInterval(this.sync, 3000, scope);
     }
 
     async sync(scope) {
-        console.log("syncing...");
-        console.log(scope.state.queuedPresses);
-
         // Transfer current presses to temporary store
         var temp = scope.state.queuedPresses;
 
@@ -50,7 +50,7 @@ class ForaDilma extends Component {
         newState.queuedPresses = 0;
         scope.setState(newState);
 
-        fetch('http://localhost/fora-dilma-server/sync.php', {
+        fetch('http://console.zes.me/fora-dilma-server/sync.php', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -70,8 +70,6 @@ class ForaDilma extends Component {
         .catch((error) => {
             console.warn(error);
         });
-
-
     }
 
     _onPan (state, pivot) {
@@ -119,9 +117,7 @@ class ForaDilma extends Component {
                     <MainButton link={this}/>
 
                     <View style={styles.hitsContainer}>
-                        <Text style={styles.hitsText}>
-                            {this.state.presses}
-                        </Text>
+                        <PressCounter link={this} ref={ c => this.state.pressCounter = c }/>
                     </View>
 
                     <ArrowButton dir={'up'} fallback={0} target={height} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state, 0) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />

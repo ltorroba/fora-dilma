@@ -8,6 +8,7 @@ var {
 } = React;
 
 var Sound = require('react-native-sound');
+var soundActive = false;
 
 var ForaShout = new Sound('fora.mp3', Sound.MAIN_BUNDLE, (error) => {
     if(error) {
@@ -18,6 +19,9 @@ var ForaShout = new Sound('fora.mp3', Sound.MAIN_BUNDLE, (error) => {
 });
 
 import styles from './styles';
+
+var buttonNormal = require('./res/Button.png');
+var buttonPressed = require('./res/ButtonPressed.png');
 
 class MainButton extends Component {
     constructor() {
@@ -30,7 +34,7 @@ class MainButton extends Component {
     render() {
         return (
             <TouchableWithoutFeedback onPressIn={ () => this.toggleButton(true) } onPressOut={ () => this.toggleButton(false) }>
-                <Image source={this.state.pressed ? require('./res/ButtonPressed.png') : require('./res/Button.png') } style={styles.button}/>
+                <Image source={ this.state.pressed ? buttonPressed : buttonNormal } style={styles.button}/>
             </TouchableWithoutFeedback>
         );
     }
@@ -39,24 +43,24 @@ class MainButton extends Component {
         let newState = {...this.state};
         newState.pressed = s;
 
-        let newMainState = {...this.props.link.state};
+        let newPressCounterState = {...this.props.link.state.pressCounter.state};
 
         if(s && !this.state.pressed) {
-            newMainState.presses++;
-            newMainState.queuedPresses++;
+            newPressCounterState.presses++;
+            newPressCounterState.queuedPresses++;
+
+            if(soundActive)
+                ForaShout.stop();
+
+            soundActive = true;
 
             ForaShout.play((success) => {
-                if(success)
-                    console.log('Successfully played sound.');
-                else
-                    console.log('Could not play sound.');
+                soundActive = false;
             });            
         }
 
-        this.forceUpdate();
-
         this.setState(newState);
-        this.props.link.setState(newMainState);
+        this.props.link.state.pressCounter.setState(newPressCounterState);
     }
 }
 
