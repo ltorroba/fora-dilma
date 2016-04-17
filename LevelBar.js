@@ -76,8 +76,6 @@ class LevelBar extends Component {
 			newState.level++;
 		}
 
-		console.log(newState);
-
 		this.setState(newState);
 	}
 
