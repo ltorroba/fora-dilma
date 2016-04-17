@@ -61,7 +61,7 @@ class Statistics extends Component {
 		return (
 			<Image source={require('./res/ForasVertical.png')} style={styles.containerStats}>
 			    <ArrowButton dir={'down'} fallback={height} target={0} link={this.props.link} 
-			    	style={styles.arrowStatsStats} onPan={ (state) => this.props.link._onPan(state, height) } 
+			    	style={styles.arrowStatsStats} onPan={ (state) => this.props.link._onPan(state, height, -1) } 
 			    	onPanEnd={ (state) => this.props.link._onPanEnd(state, height, 0) } />
 
 			    <Text style={styles.statsBigValue}>

@@ -158,11 +158,21 @@ class ForaDilma extends Component {
         });
     }
 
-    _onPan (state, pivot) {
+    _onPan (state, pivot, orientation) {
         if(this.panStart <= -1)
             this.panStart = Date.now();
 
-        this.state.verticalOffset.setValue(pivot - state.changeY);
+        var delta = pivot - state.changeY;
+        delta = orientation >= 1 ? delta : height - delta;
+        delta = delta > 0 ? delta : 0;
+
+        var target = Math.pow(delta, 0.90);
+        target = orientation >= 1 ? target : height - target;
+
+        console.log(delta);
+        console.log(target);
+
+        this.state.verticalOffset.setValue(target);
     }
 
     _onPanEnd (state, fallback, target) {
@@ -202,7 +212,7 @@ class ForaDilma extends Component {
                         <PressCounter link={this} ref={ (c) => { this.state.pressCounter = c; this.setupSync(); } }/>
                     </View>
 
-                    <ArrowButton dir={'up'} fallback={0} target={height} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state, 0) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
+                    <ArrowButton dir={'up'} fallback={0} target={height} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state, 0, 1) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
                 </Animated.View>
                 <Animated.View style={{ position: 'absolute', top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [height, 0] })}}>
                     <Statistics link={this} ref={ (c) => { this.state.statsPane = c; this.setupSync(); } }/>
