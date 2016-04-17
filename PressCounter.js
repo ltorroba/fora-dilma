@@ -8,6 +8,7 @@ var {
 } = React;
 
 import styles from './styles';
+var HelperFunctions = require('./HelperFunctions');
 
 class PressCounter extends Component {
 	constructor() {
@@ -46,7 +47,7 @@ class PressCounter extends Component {
 	render() {
 		return (
 			<Text style={styles.hitsText}>
-                {this.state.presses_artificial + this.state.localPresses}
+                { HelperFunctions.prettifyNumber(this.state.presses_artificial + this.state.localPresses) }
             </Text>
 		);
 	}

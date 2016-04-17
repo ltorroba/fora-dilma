@@ -10,6 +10,7 @@ var {
 
 import styles from './styles';
 var ArrowButton = require('./ArrowButton.js');
+var HelperFunctions = require('./HelperFunctions');
 
 var { height, width } = Dimensions.get('window');
 
@@ -64,42 +65,42 @@ class Statistics extends Component {
 			    	onPanEnd={ (state) => this.props.link._onPanEnd(state, height, 0) } />
 
 			    <Text style={styles.statsBigValue}>
-			        {this.state.total_artificial}
+			        { HelperFunctions.prettifyNumber(this.state.total_artificial) }
 			    </Text>
 			    <Text style={styles.statsBigLabel}>
 			        TOTAIS
 			    </Text>
 
 			    <Text style={styles.statsValue}>
-			        {this.state.week_artificial}
+			        { HelperFunctions.prettifyNumber(this.state.week_artificial) }
 			    </Text>
 			    <Text style={styles.statsLabel}>
 			        ESSA SEMANA
 			    </Text>
 
 			    <Text style={styles.statsValue}>
-			        {this.state.day_artificial}
+			        { HelperFunctions.prettifyNumber(this.state.day_artificial) }
 			    </Text>
 			    <Text style={styles.statsLabel}>
 			        HOJE
 			    </Text>
 
 			    <Text style={styles.statsValue}>
-			        {this.state.hour_artificial}
+			        { HelperFunctions.prettifyNumber(this.state.hour_artificial) }
 			    </Text>
 			    <Text style={styles.statsLabel}>
 			        NA ÚLTIMA HORA
 			    </Text>
 
 			    <Text style={styles.statsValue}>
-			        {this.state.userTotal}
+			        { HelperFunctions.prettifyNumber(this.state.userTotal) }
 			    </Text>
 			    <Text style={styles.statsLabel}>
 			        SÓ SEUS
 			    </Text>
 
 			    <Text style={styles.statsValue}>
-			        {this.state.usersAvg}
+			        { HelperFunctions.prettifyNumber(this.state.usersAvg) }
 			    </Text>
 			    <Text style={styles.statsLabel}>
 			        MÉDIA POR PESSOA

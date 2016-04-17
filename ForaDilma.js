@@ -77,8 +77,7 @@ class ForaDilma extends Component {
             newState.id = data.id;
             this.setState(newState);
             this.setupSync();
-        });   
-
+        });
     }
 
     componentWillMount() {
