@@ -12,12 +12,45 @@ var {
 } = React;
 
 import styles from './styles';
+import Storage from 'react-native-storage';
 var MainButton = require('./MainButton');
 var ArrowButton = require('./ArrowButton');
 var PressCounter = require('./PressCounter');
 var Statistics = require('./Statistics');
 
 var { height, width } = Dimensions.get('window');
+
+var storage = new Storage({ 
+    size: 1000,    
+    defaultExpires: null,
+    enableCache: true,
+    sync : {
+        permanent(params) {
+            storage.save({
+                key: 'permanent',
+                rawData: {
+                    id: generateId()
+                },
+                expires: null
+            });
+        }
+    }
+}) 
+
+function generateId() {
+    var id = "";
+
+    for(var i = 0; i < 32; i++) {
+        var charCode = 48 + Math.floor(Math.random() * 74); // Random char from ascii 48 to ascii 122
+
+        if(charCode == 92 || charCode == 96)
+            charCode++;
+
+        id += String.fromCharCode(charCode);
+    }
+
+    return id;
+}
 
 class ForaDilma extends Component {
     constructor() {
@@ -27,8 +60,22 @@ class ForaDilma extends Component {
         this.state = {
             pressCounter: null,
             statsPane: null,
-            verticalOffset: new Animated.Value(0)
+            verticalOffset: new Animated.Value(0),
+            userId: '',
+            setup: false
         }
+
+        storage.load({
+            key: 'permanent',
+            autoSync: true,
+            syncInBackground: true
+        }).then((data) => {
+            let newState = {...this.state}
+            newState.id = data.id;
+            this.setState(newState);
+            console.log("asdasd");
+            this.setupSync();
+        });   
 
     }
 
@@ -37,15 +84,19 @@ class ForaDilma extends Component {
     }
 
     setupSync() {
-        if(this.state.statsPane && this.state.pressCounter) {
+        if(this.state.statsPane && this.state.pressCounter && this.state.id && !this.state.setup) {
             // Initial sync
-            this.sync(this.state.pressCounter, this.state.statsPane);
+            this.sync(this.state.pressCounter, this.state.statsPane, this);
 
-            setInterval(this.sync, 3000, this.state.pressCounter, this.state.statsPane);
+            setInterval(this.sync, 3000, this.state.pressCounter, this.state.statsPane, this);
+
+            let newState = {...this.state};
+            newState.setup = true;
+            this.setState(newState);
         }
     }
 
-    async sync(pc, sp) {
+    async sync(pc, sp, r) {
         // Transfer current presses to temporary store
         var temp = pc.state.queuedPresses;
 
@@ -61,7 +112,8 @@ class ForaDilma extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                queuedPresses: temp
+                queuedPresses: temp,
+                userId: r.state.id
             })
         })
         .then((response) => response.text())
@@ -77,7 +129,8 @@ class ForaDilma extends Component {
             newSpState.week = parseInt(JSON.parse(responseText).week);
             newSpState.day = parseInt(JSON.parse(responseText).day);
             newSpState.hour = parseInt(JSON.parse(responseText).hour);
-
+            newSpState.userTotal = parseInt(JSON.parse(responseText).userTotal);
+            newSpState.usersAvg = parseInt(JSON.parse(responseText).usersAvg);
             sp.setState(newSpState);
         })
         .catch((error) => {

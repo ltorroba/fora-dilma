@@ -22,8 +22,8 @@ class Statistics extends Component {
 			week: 0,
 			day: 0,
 			hour: 0,
-			totalUser: 0,
-			personAverage: 0
+			userTotal: 0,
+			usersAvg: 0
 		}
 	}
 
@@ -63,14 +63,14 @@ class Statistics extends Component {
 			    </Text>
 
 			    <Text style={styles.statsValue}>
-			        {this.state.totalUser}
+			        {this.state.userTotal}
 			    </Text>
 			    <Text style={styles.statsLabel}>
 			        SÓ SEUS
 			    </Text>
 
 			    <Text style={styles.statsValue}>
-			        {this.state.personAverage}
+			        {this.state.usersAvg}
 			    </Text>
 			    <Text style={styles.statsLabel}>
 			        MÉDIA POR PESSOA
