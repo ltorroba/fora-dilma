@@ -60,7 +60,7 @@ class LevelBar extends Component {
 	getLevelProgress(level) {
 		var progress = [0, 1, 10, 25, 50, 100, 250, 500, 1000];
 
-		if(level <= 8)
+		if(level < 9 && level >= 0)
 			return progress[level];
 
 		return Number.MAX_SAFE_INTEGER;

@@ -44,10 +44,12 @@ class MainButton extends Component {
         newState.pressed = s;
 
         let newPressCounterState = {...this.props.link.state.pressCounter.state};
+        let newStatsPaneState = {...this.props.link.state.statsPane.state};
 
         if(s && !this.state.pressed) {
-            newPressCounterState.presses++;
             newPressCounterState.queuedPresses++;
+            newPressCounterState.localPresses++;
+            newStatsPaneState.userTotal++;
 
             if(soundActive)
                 ForaShout.stop();
@@ -58,7 +60,8 @@ class MainButton extends Component {
                 soundActive = false;
             });
 
-            this.props.link.state.levelBar.incrementProgress(1);            
+            this.props.link.state.levelBar.incrementProgress(1);
+            this.props.link.state.statsPane.setState(newStatsPaneState);
         }
 
         this.setState(newState);

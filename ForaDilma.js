@@ -104,6 +104,7 @@ class ForaDilma extends Component {
 
         // Reset queue
         let newState = {...pc.state};
+        newState.lastPressBatch = newState.localPresses;
         newState.queuedPresses = 0;
         pc.setState(newState);
 
@@ -122,8 +123,9 @@ class ForaDilma extends Component {
         .then((responseText) => {
             // Update counter, taking into consideration any queued presses
             let newPcState = {...pc.state};
-            newPcState.presses = parseInt(JSON.parse(responseText).presses) + newPcState.queuedPresses;
-            pc.setState(newPcState);
+            newPcState.presses = parseInt(JSON.parse(responseText).presses) - newPcState.lastPressBatch;
+            newPcState.pressesSinceLastSync = newPcState.queuedPresses;
+            newPcState.lastUpdate = Date.now();
 
             // Update stats pane
             let newSpState = {...sp.state};
@@ -131,15 +133,26 @@ class ForaDilma extends Component {
             newSpState.week = parseInt(JSON.parse(responseText).week);
             newSpState.day = parseInt(JSON.parse(responseText).day);
             newSpState.hour = parseInt(JSON.parse(responseText).hour);
-            newSpState.userTotal = parseInt(JSON.parse(responseText).userTotal);
             newSpState.usersAvg = parseInt(JSON.parse(responseText).usersAvg);
-            sp.setState(newSpState);
+            newSpState.lastUpdate = Date.now();
 
-            // Setup level bar, if not done already
+            // Setup level bar, if not done already, alongside initial artificial values
             if(!r.state.dataSetup) {
+                newSpState.total_artificial = parseInt(JSON.parse(responseText).presses);
+                newSpState.week_artificial = parseInt(JSON.parse(responseText).week);
+                newSpState.day_artificial = parseInt(JSON.parse(responseText).day);
+                newSpState.hour_artificial = parseInt(JSON.parse(responseText).hour);
+                newSpState.userTotal = parseInt(JSON.parse(responseText).userTotal);
+
+                newPcState.presses_artificial = parseInt(JSON.parse(responseText).presses);
+
                 r.state.levelBar.setupProgress(newSpState.userTotal);
                 r.state.dataSetup = true;
             }
+
+            // Trigger updates
+            pc.setState(newPcState);
+            sp.setState(newSpState);
         })
         .catch((error) => {
             console.warn(error);
