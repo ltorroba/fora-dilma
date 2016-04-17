@@ -17,6 +17,7 @@ var MainButton = require('./MainButton');
 var ArrowButton = require('./ArrowButton');
 var PressCounter = require('./PressCounter');
 var Statistics = require('./Statistics');
+var LevelBar = require('./LevelBar');
 
 var { height, width } = Dimensions.get('window');
 
@@ -60,9 +61,11 @@ class ForaDilma extends Component {
         this.state = {
             pressCounter: null,
             statsPane: null,
+            levelBar: null,
             verticalOffset: new Animated.Value(0),
             userId: '',
-            setup: false
+            syncSetup: false,
+            dataSetup: false
         }
 
         storage.load({
@@ -73,7 +76,6 @@ class ForaDilma extends Component {
             let newState = {...this.state}
             newState.id = data.id;
             this.setState(newState);
-            console.log("asdasd");
             this.setupSync();
         });   
 
@@ -84,14 +86,14 @@ class ForaDilma extends Component {
     }
 
     setupSync() {
-        if(this.state.statsPane && this.state.pressCounter && this.state.id && !this.state.setup) {
+        if(this.state.statsPane && this.state.pressCounter && this.state.levelBar && this.state.id && !this.state.syncSetup) {
             // Initial sync
             this.sync(this.state.pressCounter, this.state.statsPane, this);
 
             setInterval(this.sync, 3000, this.state.pressCounter, this.state.statsPane, this);
 
             let newState = {...this.state};
-            newState.setup = true;
+            newState.syncSetup = true;
             this.setState(newState);
         }
     }
@@ -104,7 +106,7 @@ class ForaDilma extends Component {
         let newState = {...pc.state};
         newState.queuedPresses = 0;
         pc.setState(newState);
-        
+
         fetch('http://console.zes.me/fora-dilma-server/sync.php', {
             method: 'POST',
             headers: {
@@ -132,6 +134,12 @@ class ForaDilma extends Component {
             newSpState.userTotal = parseInt(JSON.parse(responseText).userTotal);
             newSpState.usersAvg = parseInt(JSON.parse(responseText).usersAvg);
             sp.setState(newSpState);
+
+            // Setup level bar, if not done already
+            if(!r.state.dataSetup) {
+                r.state.levelBar.setupProgress(newSpState.userTotal);
+                r.state.dataSetup = true;
+            }
         })
         .catch((error) => {
             console.warn(error);
@@ -174,10 +182,7 @@ class ForaDilma extends Component {
         return (
             <View style={styles.container}>
                 <Animated.View style={{ position: 'absolute', top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, -height] })}}>
-                    <View style={styles.level}> 
-                        <View style={styles.levelHighlight}></View>
-                        <Text style={styles.levelText}>PROTESTANTE MIRIM</Text>
-                    </View> 
+                    <LevelBar link={this} ref={ (c) => { this.state.levelBar = c; this.setupSync(); } }/>
 
                     <MainButton link={this}/>
 

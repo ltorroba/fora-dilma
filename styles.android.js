@@ -23,27 +23,6 @@ var styles = StyleSheet.create({
         position: 'absolute',
         flex: 1
     },
-    level: {
-        backgroundColor: '#27ae60',
-        width: width,
-        height: 80,
-        margin: 0,
-        padding: 0
-    },
-    levelHighlight: {
-        position: 'absolute',
-        backgroundColor: '#2ecc71',
-        width: 100,
-        height: 80
-    },
-    levelText: {
-        marginTop: 20,
-        color: 'black',
-        fontSize: 30,
-        margin: 0,
-        backgroundColor: 'transparent',
-        textAlign: 'center'
-    },
     hitsText: {
         color: 'white',
         fontSize: 60,

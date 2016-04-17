@@ -56,7 +56,9 @@ class MainButton extends Component {
 
             ForaShout.play((success) => {
                 soundActive = false;
-            });            
+            });
+
+            this.props.link.state.levelBar.incrementProgress(1);            
         }
 
         this.setState(newState);
