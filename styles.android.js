@@ -45,6 +45,13 @@ var styles = StyleSheet.create({
         width: width,
         height: height
     },
+    statsBackground: {
+        height: 400,
+        width: 100,
+        position: 'absolute',
+        right: 20,
+        bottom: 20
+    },
     statsBigValue: {
         margin: 0,
         color: 'white',

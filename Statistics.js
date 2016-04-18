@@ -5,7 +5,8 @@ var {
 	Component,
 	Image,
 	Text,
-	Dimensions
+	Dimensions,
+	View
 } = React;
 
 import styles from './styles';
@@ -59,7 +60,8 @@ class Statistics extends Component {
 
 	render() {
 		return (
-			<Image source={require('./res/ForasVertical.png')} style={styles.containerStats}>
+			<View style={styles.containerStats}>
+				<Image source={require('./res/ForasVertical.png')} style={styles.statsBackground}></Image>
 			    <ArrowButton dir={'down'} fallback={height} target={0} link={this.props.link} 
 			    	style={styles.arrowStatsStats} onPan={ (state) => this.props.link._onPan(state, height, -1) } 
 			    	onPanEnd={ (state) => this.props.link._onPanEnd(state, height, 0) } />
@@ -105,7 +107,7 @@ class Statistics extends Component {
 			    <Text style={styles.statsLabel}>
 			        MÉDIA POR PESSOA
 			    </Text>
-			</Image>
+			</View>
 		);
 	}
 }

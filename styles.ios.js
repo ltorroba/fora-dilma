@@ -44,7 +44,13 @@ var styles = StyleSheet.create({
     containerStats: {
         width: width,
         height: height,
-        resizeMode: 'contain'
+    },
+    statsBackground: {
+        height: 400,
+        width: 100,
+        position: 'absolute',
+        right: 20,
+        bottom: 20
     },
     statsBigValue: {
         margin: 0,
