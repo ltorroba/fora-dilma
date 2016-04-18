@@ -52,7 +52,8 @@ class ForaDilma extends Component {
             verticalOffset: new Animated.Value(0),
             userId: '',
             syncSetup: false,
-            dataSetup: false
+            dataSetup: false,
+            error: false
         }
 
         storage.load({
@@ -146,7 +147,7 @@ class ForaDilma extends Component {
                 }
             })
             .catch((error) => {
-                console.warn(error);
+                r.die('Erro ao tentar estabelecer conexão', r);
             });
         }
     }
@@ -211,6 +212,8 @@ class ForaDilma extends Component {
     }
 
     die(message, rootScope) {
+        rootScope.state.error = true;
+
         Alert.alert('Erro!', message, [
             { text: 'Culpa da Dilma!', onPress: () => { 
                 console.log("OK pressed");
