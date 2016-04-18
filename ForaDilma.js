@@ -18,6 +18,7 @@ var ArrowButton = require('./ArrowButton');
 var PressCounter = require('./PressCounter');
 var Statistics = require('./Statistics');
 var LevelBar = require('./LevelBar');
+var HelperFunctions = require('./HelperFunctions');
 
 var { height, width } = Dimensions.get('window');
 
@@ -30,28 +31,13 @@ var storage = new Storage({
             storage.save({
                 key: 'permanent',
                 rawData: {
-                    id: generateId()
+                    id: HelperFunctions.generateId()
                 },
                 expires: null
             });
         }
     }
-}) 
-
-function generateId() {
-    var id = "";
-
-    for(var i = 0; i < 32; i++) {
-        var charCode = 48 + Math.floor(Math.random() * 74); // Random char from ascii 48 to ascii 122
-
-        if(charCode == 92 || charCode == 96)
-            charCode++;
-
-        id += String.fromCharCode(charCode);
-    }
-
-    return id;
-}
+});
 
 class ForaDilma extends Component {
     constructor() {

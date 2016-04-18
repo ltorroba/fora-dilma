@@ -23,6 +23,21 @@ class HelperFunctions {
 
 		return temp;
 	}
+
+	static generateId():String {
+	    var id = "";
+
+	    for(var i = 0; i < 32; i++) {
+	        var charCode = 48 + Math.floor(Math.random() * 74); // Random char from ascii 48 to ascii 122
+
+	        if(charCode == 92 || charCode == 96)
+	            charCode++;
+
+	        id += String.fromCharCode(charCode);
+	    }
+
+	    return id;
+	}
 }
 
 module.exports = HelperFunctions;

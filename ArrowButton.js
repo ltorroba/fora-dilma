@@ -21,8 +21,6 @@ class ArrowButton extends Component {
             fallback: props.fallback,
             target: props.target
         }
-
-        console.log({ scaleY: this.state.direction == 'up' ? 1 : -1 });
     }
 
     render() {
