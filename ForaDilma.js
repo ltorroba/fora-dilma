@@ -8,7 +8,8 @@ var {
     Dimensions,
     Text,
     Image,
-    Easing
+    Easing,
+    Alert
 } = React;
 
 import styles from './styles';
@@ -84,64 +85,70 @@ class ForaDilma extends Component {
     }
 
     async sync(pc, sp, r) {
-        // Transfer current presses to temporary store
-        var temp = pc.state.queuedPresses;
+        if(!r.state.error) {
+            // Transfer current presses to temporary store
+            var temp = pc.state.queuedPresses;
 
-        // Reset queue
-        let newState = {...pc.state};
-        newState.lastPressBatch = newState.localPresses;
-        newState.queuedPresses = 0;
-        pc.setState(newState);
+            // Reset queue
+            let newState = {...pc.state};
+            newState.lastPressBatch = newState.localPresses;
+            newState.queuedPresses = 0;
+            pc.setState(newState);
 
-        fetch('http://console.zes.me/fora-dilma-server/sync.php', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                queuedPresses: temp,
-                userId: r.state.id
+            fetch('http://console.zes.me/fora-dilma-server/sync.php', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    queuedPresses: temp,
+                    userId: ''
+                })
             })
-        })
-        .then((response) => response.text())
-        .then((responseText) => {
-            // Update counter, taking into consideration any queued presses
-            let newPcState = {...pc.state};
-            newPcState.presses = parseInt(JSON.parse(responseText).presses) - newPcState.lastPressBatch;
-            newPcState.pressesSinceLastSync = newPcState.queuedPresses;
-            newPcState.lastUpdate = Date.now();
+            .then((response) => response.text())
+            .then((responseText) => {
+                if(JSON.parse(responseText).error) {
+                    r.die(JSON.parse(responseText).error, r);                    
+                } else {
+                    // Update counter, taking into consideration any queued presses
+                    let newPcState = {...pc.state};
+                    newPcState.presses = parseInt(JSON.parse(responseText).presses) - newPcState.lastPressBatch;
+                    newPcState.pressesSinceLastSync = newPcState.queuedPresses;
+                    newPcState.lastUpdate = Date.now();
 
-            // Update stats pane
-            let newSpState = {...sp.state};
-            newSpState.total = parseInt(JSON.parse(responseText).presses);
-            newSpState.week = parseInt(JSON.parse(responseText).week);
-            newSpState.day = parseInt(JSON.parse(responseText).day);
-            newSpState.hour = parseInt(JSON.parse(responseText).hour);
-            newSpState.usersAvg = parseInt(JSON.parse(responseText).usersAvg);
-            newSpState.lastUpdate = Date.now();
+                    // Update stats pane
+                    let newSpState = {...sp.state};
+                    newSpState.total = parseInt(JSON.parse(responseText).presses);
+                    newSpState.week = parseInt(JSON.parse(responseText).week);
+                    newSpState.day = parseInt(JSON.parse(responseText).day);
+                    newSpState.hour = parseInt(JSON.parse(responseText).hour);
+                    newSpState.usersAvg = parseInt(JSON.parse(responseText).usersAvg);
+                    newSpState.lastUpdate = Date.now();
 
-            // Setup level bar, if not done already, alongside initial artificial values
-            if(!r.state.dataSetup) {
-                newSpState.total_artificial = parseInt(JSON.parse(responseText).presses);
-                newSpState.week_artificial = parseInt(JSON.parse(responseText).week);
-                newSpState.day_artificial = parseInt(JSON.parse(responseText).day);
-                newSpState.hour_artificial = parseInt(JSON.parse(responseText).hour);
-                newSpState.userTotal = parseInt(JSON.parse(responseText).userTotal);
+                    // Setup level bar, if not done already, alongside initial artificial values
+                    if(!r.state.dataSetup) {
+                        newSpState.total_artificial = parseInt(JSON.parse(responseText).presses);
+                        newSpState.week_artificial = parseInt(JSON.parse(responseText).week);
+                        newSpState.day_artificial = parseInt(JSON.parse(responseText).day);
+                        newSpState.hour_artificial = parseInt(JSON.parse(responseText).hour);
+                        newSpState.userTotal = parseInt(JSON.parse(responseText).userTotal);
 
-                newPcState.presses_artificial = parseInt(JSON.parse(responseText).presses);
+                        newPcState.presses_artificial = parseInt(JSON.parse(responseText).presses);
 
-                r.state.levelBar.setupProgress(newSpState.userTotal);
-                r.state.dataSetup = true;
-            }
+                        r.state.levelBar.setupProgress(newSpState.userTotal);
+                        r.state.dataSetup = true;
+                    }
 
-            // Trigger updates
-            pc.setState(newPcState);
-            sp.setState(newSpState);
-        })
-        .catch((error) => {
-            console.warn(error);
-        });
+                    // Trigger updates
+                    pc.setState(newPcState);
+                    sp.setState(newSpState);
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
+        }
     }
 
     _onPan (state, pivot, orientation) {
@@ -201,7 +208,14 @@ class ForaDilma extends Component {
                 </Animated.View>
             </View>
         );
-        
+    }
+
+    die(message, rootScope) {
+        Alert.alert('Erro!', message, [
+            { text: 'Culpa da Dilma!', onPress: () => { 
+                console.log("OK pressed");
+            } }
+        ]);
     }
 }
 
