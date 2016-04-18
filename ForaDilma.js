@@ -203,7 +203,9 @@ class ForaDilma extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Animated.View style={{ position: 'absolute', top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, -height] })}}>
+                <Animated.View style={{ position: 'absolute', 
+                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, -height] }), 
+                                        opacity: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [1, 0] })}}>
                     <LevelBar link={this} ref={ (c) => { this.state.levelBar = c; this.setupSync(); } }/>
 
                     <MainButton link={this}/>
@@ -214,7 +216,9 @@ class ForaDilma extends Component {
 
                     <ArrowButton dir={'up'} fallback={0} target={height} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state, 0, 1) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
                 </Animated.View>
-                <Animated.View style={{ position: 'absolute', top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [height, 0] })}}>
+                <Animated.View style={{ position: 'absolute', 
+                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [height, 0] }), 
+                                        opacity: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, 1] })}}>
                     <Statistics link={this} ref={ (c) => { this.state.statsPane = c; this.setupSync(); } }/>
                 </Animated.View>
             </View>
