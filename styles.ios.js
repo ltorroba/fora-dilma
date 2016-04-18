@@ -48,7 +48,6 @@ var styles = StyleSheet.create({
     },
     statsBigValue: {
         margin: 0,
-        marginTop: 5,
         color: 'white',
         fontSize: 60,        
         backgroundColor: 'transparent',
@@ -82,17 +81,21 @@ var styles = StyleSheet.create({
     },
     arrowStatsMain: {
         position: 'absolute',
-        width: 20,
-        height: 20,
-        top: height - 50,
-        marginLeft: (width-20)/2
+        backgroundColor: 'transparent',
+        width: 60,
+        height: 60,
+        top: height - 70,
+        paddingLeft: (width-60)/2,
+        paddingRight: width-(width-60)/2
     },
     arrowStatsStats: {
         position: 'relative',
-        width: 20,
-        height: 20,
-        marginTop: 30,
-        marginLeft: (width-20)/2
+        backgroundColor: 'transparent',
+        width: 40,
+        height: 50,
+        paddingTop: 10,
+        paddingLeft: (width-40)/2,
+        paddingRight: width-(width-40)/2
     }
 });
 

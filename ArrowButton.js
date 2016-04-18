@@ -21,12 +21,14 @@ class ArrowButton extends Component {
             fallback: props.fallback,
             target: props.target
         }
+
+        console.log({ scaleY: this.state.direction == 'up' ? 1 : -1 });
     }
 
     render() {
         return (
-            <TouchableWithoutFeedback onPress={ () => this.onPress() } hitSlop={{top: 50, bottom: 50, right: 50, left: 50}}>
-                <Image source={ this.state.direction == 'up' ? require('./res/SmallArrow.png') : require('./res/SmallArrowDown.png') } style={{ width: 20, height: 20 }}/>
+            <TouchableWithoutFeedback onPress={ () => this.onPress() }>
+                <Image source={ require('./res/SmallArrow.png') }  style={{ width: this.state.direction == 'up' ? 60 : 40, height: this.state.direction == 'up' ? 60 : 40, transform: [ { scaleY: this.state.direction == 'up' ? 1 : -1 } ] }}/>
             </TouchableWithoutFeedback>
         );
     }
