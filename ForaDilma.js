@@ -163,16 +163,9 @@ class ForaDilma extends Component {
             this.panStart = Date.now();
 
         var delta = pivot - state.changeY;
-        delta = orientation >= 1 ? delta : height - delta;
         delta = delta > 0 ? delta : 0;
 
-        var target = Math.pow(delta, 0.90);
-        target = orientation >= 1 ? target : height - target;
-
-        console.log(delta);
-        console.log(target);
-
-        this.state.verticalOffset.setValue(target);
+        this.state.verticalOffset.setValue(delta);
     }
 
     _onPanEnd (state, fallback, target) {
@@ -184,8 +177,10 @@ class ForaDilma extends Component {
             }).start();
         }
 
+        var threshold = (Math.abs(state.absoluteY - fallback) - (height / 2)) / (height / 2) * 2;
+
         // Trigger transition if pan is strong enough
-        if(Math.abs(state.velocityY) >= 3) {
+        if(Math.abs(state.velocityY) >= threshold) {
             Animated.spring(this.state.verticalOffset, {
                 toValue: target,
                 easing: Easing.linear
