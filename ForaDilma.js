@@ -103,7 +103,7 @@ class ForaDilma extends Component {
                 },
                 body: JSON.stringify({
                     queuedPresses: temp,
-                    userId: ''
+                    userId: r.state.userId
                 })
             })
             .then((response) => response.text())
