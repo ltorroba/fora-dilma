@@ -46,9 +46,11 @@ class PressCounter extends Component {
 
 	render() {
 		return (
-			<Text style={styles.hitsText}>
-                { HelperFunctions.prettifyNumber(this.state.presses_artificial + this.state.localPresses) }
-            </Text>
+			<View style={styles.hitsContainer}>
+				<Text style={styles.hitsText}>
+	                { HelperFunctions.prettifyNumber(this.state.presses_artificial + this.state.localPresses) }
+	            </Text>
+            </View>
 		);
 	}
 }

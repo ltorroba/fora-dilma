@@ -204,15 +204,12 @@ class ForaDilma extends Component {
         return (
             <View style={styles.container}>
                 <Animated.View style={{ position: 'absolute', 
-                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, -height] }), 
-                                        opacity: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [1, 0] })}}>
+                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, -height] })}}>
                     <LevelBar link={this} ref={ (c) => { this.state.levelBar = c; this.setupSync(); } }/>
 
                     <MainButton link={this}/>
 
-                    <View style={styles.hitsContainer}>
-                        <PressCounter link={this} ref={ (c) => { this.state.pressCounter = c; this.setupSync(); } }/>
-                    </View>
+                    <PressCounter link={this} ref={ (c) => { this.state.pressCounter = c; this.setupSync(); } }/>
 
                     <ArrowButton dir={'up'} fallback={0} target={height} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state, 0, 1) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
                 </Animated.View>
