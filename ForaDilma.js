@@ -50,7 +50,7 @@ class ForaDilma extends Component {
             statsPane: null,
             levelBar: null,
             verticalOffset: new Animated.Value(0),
-            userId: '',
+            id: '',
             syncSetup: false,
             dataSetup: false,
             error: false
@@ -104,7 +104,7 @@ class ForaDilma extends Component {
                 },
                 body: JSON.stringify({
                     queuedPresses: temp,
-                    userId: r.state.userId
+                    userId: r.state.id
                 })
             })
             .then((response) => response.text())
