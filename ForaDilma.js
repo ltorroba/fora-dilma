@@ -11,6 +11,7 @@ var {
     Easing,
     Alert
 } = React;
+var Orientation = require('react-native-orientation');
 
 import styles from './styles';
 import Storage from 'react-native-storage';
@@ -70,6 +71,7 @@ class ForaDilma extends Component {
 
     componentWillMount() {
         this.state.verticalOffset.setValue(0);
+        Orientation.lockToPortrait();
     }
 
     setupSync() {

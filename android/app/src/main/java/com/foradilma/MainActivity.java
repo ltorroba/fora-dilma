@@ -9,6 +9,10 @@ import java.util.List;
 
 import com.zmxv.RNSound.RNSoundPackage;
 
+import android.content.Intent;
+import android.content.res.Configuration;
+import com.github.yamill.orientation.OrientationPackage;
+
 public class MainActivity extends ReactActivity {
 
     /**
@@ -37,7 +41,16 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
-            new RNSoundPackage()
+            new RNSoundPackage(),
+            new OrientationPackage(this)
         );
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Intent intent = new Intent("onConfigurationChanged");
+        intent.putExtra("newConfig", newConfig);
+        this.sendBroadcast(intent);
     }
 }

@@ -24,6 +24,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		941B4F6A1CC1056B00CE55AE /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 941B4F691CC1055400CE55AE /* libRNSound.a */; };
 		941B4F6C1CC1070100CE55AE /* Fora.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 941B4F6B1CC1070100CE55AE /* Fora.mp3 */; };
+		941B4F881CCD2A8900CE55AE /* Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 941B4F871CCD2A8900CE55AE /* Orientation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +138,8 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		941B4F5A1CC1055400CE55AE /* RNSound.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		941B4F6B1CC1070100CE55AE /* Fora.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Fora.mp3; path = ../android/app/src/main/res/raw/Fora.mp3; sourceTree = "<group>"; };
+		941B4F861CCD2A8900CE55AE /* Orientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Orientation.h; sourceTree = "<group>"; };
+		941B4F871CCD2A8900CE55AE /* Orientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Orientation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -301,6 +304,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				941B4F851CCD2A8900CE55AE /* RCTOrientation */,
 				13B07FAE1A68108700A75B9A /* ForaDilma */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ForaDilmaTests */,
@@ -325,6 +329,16 @@
 				941B4F691CC1055400CE55AE /* libRNSound.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		941B4F851CCD2A8900CE55AE /* RCTOrientation */ = {
+			isa = PBXGroup;
+			children = (
+				941B4F861CCD2A8900CE55AE /* Orientation.h */,
+				941B4F871CCD2A8900CE55AE /* Orientation.m */,
+			);
+			name = RCTOrientation;
+			path = "../node_modules/react-native-orientation/RCTOrientation";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -578,6 +592,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				941B4F881CCD2A8900CE55AE /* Orientation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
