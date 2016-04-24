@@ -4,7 +4,8 @@ var React = require('react-native');
 var { 
     Component,
     TouchableWithoutFeedback,
-    Image
+    Image,
+    View
 } = React;
 
 var Sound = require('react-native-sound');
@@ -33,9 +34,12 @@ class MainButton extends Component {
 
     render() {
         return (
-            <TouchableWithoutFeedback onPressIn={ () => this.toggleButton(true) } onPressOut={ () => this.toggleButton(false) }>
-                <Image source={ this.state.pressed ? buttonPressed : buttonNormal } style={styles.button}/>
-            </TouchableWithoutFeedback>
+            <View>
+                <Image source={ buttonPressed } style={{ width: 0, height: 0, opacity: 1 }} />
+                <TouchableWithoutFeedback onPressIn={ () => this.toggleButton(true) } onPressOut={ () => this.toggleButton(false) }>
+                    <Image source={ this.state.pressed ? buttonPressed : buttonNormal } style={styles.button}/>
+                </TouchableWithoutFeedback>
+            </View>
         );
     }
 
