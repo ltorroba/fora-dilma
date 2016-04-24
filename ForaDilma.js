@@ -14,11 +14,10 @@ var {
 
 import styles from './styles';
 import Storage from 'react-native-storage';
-var MainButton = require('./MainButton');
-var ArrowButton = require('./ArrowButton');
-var PressCounter = require('./PressCounter');
+
+var Main = require('./MainPane');
 var Statistics = require('./Statistics');
-var LevelBar = require('./LevelBar');
+
 var HelperFunctions = require('./HelperFunctions');
 
 var { height, width } = Dimensions.get('window');
@@ -45,6 +44,7 @@ class ForaDilma extends Component {
         super();
 
         this.panStart = -1;
+        this.panStartY = -1;
         this.state = {
             pressCounter: null,
             statsPane: null,
@@ -153,8 +153,10 @@ class ForaDilma extends Component {
     }
 
     _onPan (state, pivot, orientation) {
-        if(this.panStart <= -1)
-            this.panStart = Date.now();
+        if(this.panStart <= -1) {
+           this.panStart = Date.now();
+           this.panStartY = state.absoluteY;
+        }
 
         var delta = pivot - state.changeY;
         delta = delta > 0 ? delta : 0;
@@ -171,7 +173,8 @@ class ForaDilma extends Component {
             }).start();
         }
 
-        var threshold = (Math.abs(state.absoluteY - fallback) - (height / 2)) / (height / 2) * 2;
+        var delta = Math.abs(state.absoluteY - this.panStartY);
+        var threshold = (-4 / height) * delta + 2;
 
         // Trigger transition if pan is strong enough
         if(Math.abs(state.velocityY) >= threshold) {
@@ -193,19 +196,15 @@ class ForaDilma extends Component {
         return (
             <View style={styles.container}>
                 <Animated.View style={{ position: 'absolute', 
-                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, -height] })}}>
-                    <LevelBar link={this} ref={ (c) => { this.state.levelBar = c; this.setupSync(); } }/>
-
-                    <MainButton link={this}/>
-
-                    <PressCounter link={this} ref={ (c) => { this.state.pressCounter = c; this.setupSync(); } }/>
-
-                    <ArrowButton dir={'up'} fallback={0} target={height} link={this} style={styles.arrowStatsMain} onPan={ (state) => this._onPan(state, 0, 1) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
+                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, -height] })}}>                                        
+                    <Main fallback={0} target={height} link={this} onPan={ (state) => this._onPan(state, 0, 1) } 
+                        onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
                 </Animated.View>
                 <Animated.View style={{ position: 'absolute', 
                                         top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [height, 0] }), 
                                         opacity: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, 1] })}}>
-                    <Statistics link={this} ref={ (c) => { this.state.statsPane = c; this.setupSync(); } }/>
+                    <Statistics link={this} fallback={height} target={0} onPan={ (state) => this._onPan(state, height, -1) } 
+                        onPanEnd={ (state) => this._onPanEnd(state, height, 0) }/>
                 </Animated.View>
             </View>
         );

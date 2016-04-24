@@ -12,9 +12,11 @@ var {
 import styles from './styles';
 var ArrowButton = require('./ArrowButton.js');
 var HelperFunctions = require('./HelperFunctions');
+const makePannable = require('./MakePannable.js');
 
 var { height, width } = Dimensions.get('window');
 
+@makePannable
 class Statistics extends Component {
 	constructor() {
 		super();
@@ -30,11 +32,14 @@ class Statistics extends Component {
 			hour: 0,
 			hour_artificial: 0,
 			userTotal: 0,
-			usersAvg: 0,
+			usersAvg: 0
 		}
 	}
 
 	componentWillMount() {
+		this.props.link.state.statsPane = this;
+		this.props.link.setupSync();
+
 		setInterval(this.performArtificialTick, 200, this);
 	}
 
@@ -62,9 +67,6 @@ class Statistics extends Component {
 		return (
 			<View style={styles.containerStats}>
 				<Image source={require('./res/ForasVertical.png')} style={styles.statsBackground}></Image>
-			    <ArrowButton dir={'down'} fallback={height} target={0} link={this.props.link} 
-			    	style={styles.arrowStatsStats} onPan={ (state) => this.props.link._onPan(state, height, -1) } 
-			    	onPanEnd={ (state) => this.props.link._onPanEnd(state, height, 0) } />
 
 			    <Text style={styles.statsBigValue}>
 			        { HelperFunctions.prettifyNumber(this.state.total_artificial) }
