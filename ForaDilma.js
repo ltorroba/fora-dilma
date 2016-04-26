@@ -26,18 +26,7 @@ var { height, width } = Dimensions.get('window');
 var storage = new Storage({ 
     size: 1000,    
     defaultExpires: null,
-    enableCache: true,
-    sync : {
-        permanent(params) {
-            storage.save({
-                key: 'permanent',
-                rawData: {
-                    id: HelperFunctions.generateId()
-                },
-                expires: null
-            });
-        }
-    }
+    enableCache: true
 });
 
 class ForaDilma extends Component {
@@ -59,11 +48,32 @@ class ForaDilma extends Component {
 
         storage.load({
             key: 'permanent',
-            autoSync: true,
-            syncInBackground: true
+            autoSync: false,
+            syncInBackground: false
         }).then((data) => {
+            // If data exists, load user ID
             let newState = {...this.state}
+
             newState.id = data.id;
+
+            this.setState(newState);
+            this.setupSync();
+        }).catch(err => {
+            // On first run, generate user ID
+            var generatedId = HelperFunctions.generateId();
+            
+            storage.save({
+                key: 'permanent',
+                rawData: {
+                    id: generatedId
+                },
+                expires: null
+            });
+
+            let newState = {...this.state}
+
+            newState.id = generatedId;
+
             this.setState(newState);
             this.setupSync();
         });
