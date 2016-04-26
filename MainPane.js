@@ -3,7 +3,8 @@
 var React = require('react-native');
 var {
 	Component,
-	View
+	View,
+	Image
 } = React;
 
 import styles from './styles';
@@ -25,6 +26,7 @@ class MainPane extends Component {
 				<LevelBar link={this.props.link} ref={ (c) => { this.props.link.state.levelBar = c; this.props.link.setupSync(); } }/>
                 <MainButton link={this.props.link}/>
                 <PressCounter link={this.props.link} ref={ (c) => { this.props.link.state.pressCounter = c; this.props.link.setupSync(); } }/>
+                <Image source={ require('./res/SmallArrow.png') } style={ styles.panArrow }/>
            	</View>
 		);
 	}

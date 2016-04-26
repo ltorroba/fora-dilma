@@ -10,7 +10,6 @@ var {
 } = React;
 
 import styles from './styles';
-var ArrowButton = require('./ArrowButton.js');
 var HelperFunctions = require('./HelperFunctions');
 const makePannable = require('./MakePannable.js');
 

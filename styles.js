@@ -43,7 +43,7 @@ var styles = StyleSheet.create({
     },
     containerStats: {
         width: width,
-        height: height,
+        height: height
     },
     statsBackground: {
         height: 400,
@@ -85,23 +85,13 @@ var styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold'
     },
-    arrowStatsMain: {
+    panArrow: {
         position: 'absolute',
-        backgroundColor: 'transparent',
-        width: 60,
-        height: 60,
-        top: height - 70,
-        paddingLeft: (width-60)/2,
-        paddingRight: width-(width-60)/2
-    },
-    arrowStatsStats: {
-        position: 'relative',
-        backgroundColor: 'transparent',
         width: 40,
-        height: 50,
-        paddingTop: 10,
-        paddingLeft: (width-40)/2,
-        paddingRight: width-(width-40)/2
+        height: 40,
+        top: height-60,
+        marginLeft: (width-40)/2,
+        marginRight: width-(width-40)/2
     }
 });
 
