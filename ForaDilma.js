@@ -175,14 +175,6 @@ class ForaDilma extends Component {
     }
 
     _onPanEnd (state, fallback, target) {
-        // Simulate button press if small tap is intentionally made instead of a button press
-        if(Date.now() - this.panStart <= 1000) {
-            Animated.spring(this.state.verticalOffset, {
-                toValue: target,
-                easing: Easing.linear
-            }).start();
-        }
-
         var delta = Math.abs(state.absoluteY - this.panStartY);
         var threshold = (-4 / height) * delta + 2;
 
