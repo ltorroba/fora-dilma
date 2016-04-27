@@ -21,6 +21,7 @@ class LevelBar extends Component {
 
 		this.state = {
 			level: 0,
+			experience: 0,
 			progress: new Animated.Value(0)
 		}
 	}
@@ -40,21 +41,24 @@ class LevelBar extends Component {
 			toValue: p,
 			easing: Easing.linear
 		}).start( ( { finished } ) => {
-			if(this.state.progress._value >= this.getLevelProgress(this.state.level + 1)) {
+			if(p >= this.getLevelProgress(this.state.level + 1)) {
 				// Levelled up
-				var temp = this.state.progress._value - this.getLevelProgress(this.state.level + 1);
-
 				let newState = {...this.state};
+
+				newState.experience -= this.getLevelProgress(this.state.level + 1);				
 				newState.level++;
-				this.setState(newState);
-				
-				this.setProgress(temp);
+
+				this.setState(newState);				
+				this.setProgress(newState.experience);
 			}
 		});
 	}
 
 	incrementProgress(i) {
-		this.setProgress(this.state.progress._value + i);
+		let newState = {...this.state};
+		newState.experience += i;
+		this.setState(newState);
+		this.setProgress(newState.experience);
 	}
 
 	getLevelProgress(level) {
@@ -69,14 +73,15 @@ class LevelBar extends Component {
 	setupProgress(p) {
 		let newState = {...this.state};
 		newState.level = 0;
-		newState.progress.setValue(p);
+		newState.experience = p;
 
-		while(newState.progress._value > this.getLevelProgress(newState.level + 1)) {
-			newState.progress.setValue(newState.progress._value - this.getLevelProgress(newState.level + 1));
+		while(newState.experience >= this.getLevelProgress(newState.level + 1)) {
+			newState.experience -= this.getLevelProgress(newState.level + 1);
 			newState.level++;
 		}
 
 		this.setState(newState);
+		this.setProgress(newState.experience);
 	}
 
 	getLevelBaseStyle() {
