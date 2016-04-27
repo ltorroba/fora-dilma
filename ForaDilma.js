@@ -144,16 +144,9 @@ class ForaDilma extends Component {
                     newSpState.usersAvg = parseInt(JSON.parse(responseText).usersAvg);
                     newSpState.lastUpdate = Date.now();
 
-                    // Setup level bar, if not done already, alongside initial artificial values
+                    // Setup level bar, if not done already
                     if(!r.state.dataSetup) {
-                        newSpState.total_artificial = parseInt(JSON.parse(responseText).presses);
-                        newSpState.week_artificial = parseInt(JSON.parse(responseText).week);
-                        newSpState.day_artificial = parseInt(JSON.parse(responseText).day);
-                        newSpState.hour_artificial = parseInt(JSON.parse(responseText).hour);
                         newSpState.userTotal = parseInt(JSON.parse(responseText).userTotal);
-
-                        newPcState.presses_artificial = parseInt(JSON.parse(responseText).presses);
-
                         r.state.levelBar.setupProgress(newSpState.userTotal);
                         r.state.dataSetup = true;
                     }

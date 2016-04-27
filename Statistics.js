@@ -49,15 +49,29 @@ class Statistics extends Component {
 		// Update artificial states
 		let newState = {...scope.state};
 
-		var total_artificial_average = ttg >= 1 ? (newState.total - newState.total_artificial) / ttg : newState.total - newState.total_artificial;
-		var artificial_increment = Math.floor(Math.random() * 2 + total_artificial_average - 1);
-		
-		artificial_increment = artificial_increment > 0 ? artificial_increment : 0;
+		// Increment artificial total
+		var artificial_increment_total = ttg >= 1 ? (newState.total - newState.total_artificial) / ttg : newState.total - newState.total_artificial;
+		artificial_increment_total = Math.abs(Math.floor(Math.random() * 2 + artificial_increment_total - 1));
+		artificial_increment_total = Math.abs(newState.total_artificial - newState.total) >= artificial_increment_total ? artificial_increment_total : Math.abs(newState.total_artificial - newState.total);
+		newState.total_artificial += newState.total_artificial <= newState.total ? artificial_increment_total : artificial_increment_total * -1;
 
-		newState.total_artificial += newState.total_artificial < newState.total ? artificial_increment : 0;
-		newState.week_artificial += newState.week_artificial < newState.week ? artificial_increment : 0;
-		newState.day_artificial += newState.day_artificial < newState.day ? artificial_increment : 0;
-		newState.hour_artificial += newState.hour_artificial < newState.hour ? artificial_increment : 0;
+		// Increment week artificial
+		var artificial_increment_week = ttg >= 1 ? (newState.week - newState.week_artificial) / ttg : newState.week - newState.week_artificial;
+		artificial_increment_week = Math.abs(Math.floor(Math.random() * 2 + artificial_increment_week - 1));
+		artificial_increment_week = Math.abs(newState.week_artificial - newState.week) >= artificial_increment_week ? artificial_increment_week : Math.abs(newState.week_artificial - newState.week);
+		newState.week_artificial += newState.week_artificial <= newState.week ? artificial_increment_week : artificial_increment_week * -1;
+
+		// Increment day artificial
+		var artificial_increment_day = ttg >= 1 ? (newState.day - newState.day_artificial) / ttg : newState.day - newState.day_artificial;
+		artificial_increment_day = Math.abs(Math.floor(Math.random () * 2 + artificial_increment_day - 1));
+		artificial_increment_day = Math.abs(newState.day_artificial - newState.day) >= artificial_increment_day ? artificial_increment_day : Math.abs(newState.day_artificial - newState.day);
+		newState.day_artificial += newState.day_artificial <= newState.day ? artificial_increment_day : artificial_increment_day * -1;
+
+		// Increment hour artificial
+		var artificial_increment_hour = ttg >= 1 ? (newState.hour - newState.hour_artificial) / ttg : newState.hour - newState.hour_artificial;
+		artificial_increment_hour = Math.abs(Math.floor(Math.random () * 2 + artificial_increment_hour - 1));
+		artificial_increment_hour = Math.abs(newState.hour_artificial - newState.hour) >= artificial_increment_hour ? artificial_increment_hour : Math.abs(newState.hour_artificial - newState.hour);
+		newState.hour_artificial += newState.hour_artificial <= newState.hour ? artificial_increment_hour : artificial_increment_hour * -1;
 
 		scope.setState(newState);
 	}
