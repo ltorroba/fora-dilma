@@ -1,6 +1,7 @@
 package com.foradilma;
 
 import com.facebook.react.ReactActivity;
+import com.microsoft.codepush.react.CodePush;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
@@ -12,6 +13,8 @@ import com.zmxv.RNSound.RNSoundPackage;
 import android.content.Intent;
 import android.content.res.Configuration;
 import com.github.yamill.orientation.OrientationPackage;
+
+import com.microsoft.codepush.react.CodePush;
 
 public class MainActivity extends ReactActivity {
 
@@ -41,16 +44,24 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new CodePush("ctglft3YRofTcZxAcWcJOE5h2mj-Eytu7Wteb", this, BuildConfig.DEBUG),
             new RNSoundPackage(),
             new OrientationPackage(this)
         );
     }
 
+    // Required for react-native-orientation
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Intent intent = new Intent("onConfigurationChanged");
         intent.putExtra("newConfig", newConfig);
         this.sendBroadcast(intent);
+    }
+
+    // Required for CodePush
+    @Override
+    protected String getJSBundleFile() {
+        return CodePush.getBundleUrl();
     }
 }

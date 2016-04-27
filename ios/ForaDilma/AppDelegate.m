@@ -8,6 +8,7 @@
  */
 
 #import "AppDelegate.h"
+#import "CodePush.h"
 
 #import "RCTRootView.h"
 
@@ -31,7 +32,7 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+//  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
 
   /**
    * OPTION 2
@@ -41,7 +42,22 @@
    * simulator in the "Release" build configuration.
    */
 
-//   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+//   jsCodeLocation = [CodePush bundleURL];
+  
+  /**
+   * CODEPUSH HYBRID OPTION OF ULTIMATE DOOM AND DESTRUCTION!!!1
+   * Humans - they push frontiers. They don't stop fighting. They just keep
+   * going, even in the hardest times. We don't settle for survival, we want
+   * to enjoy life, and to enjoy it we need to work. This is why we use the
+   * following hybrid function to alternate between development server and
+   * CodePush options.
+   */
+  
+#ifdef DEBUG
+  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+#else
+  jsCodeLocation = [CodePush bundleURL];
+#endif
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"ForaDilma"

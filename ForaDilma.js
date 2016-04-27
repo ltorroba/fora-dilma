@@ -15,6 +15,7 @@ var Orientation = require('react-native-orientation');
 
 import styles from './styles';
 import Storage from 'react-native-storage';
+import codePush from "react-native-code-push";
 
 var Main = require('./MainPane');
 var Statistics = require('./Statistics');
@@ -82,6 +83,10 @@ class ForaDilma extends Component {
     componentWillMount() {
         this.state.verticalOffset.setValue(0);
         Orientation.lockToPortrait();
+    }
+
+    componentDidMount() {
+        codePush.sync();
     }
 
     setupSync() {
