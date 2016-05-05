@@ -1,6 +1,10 @@
 'use strict';
 
 class HelperFunctions {
+        // Takes in an integer and returns a string with a formatted number (following Brazilian convention).
+        // E.g.:
+        //   INPUT = 1000000
+        //   OUTPUT = '1,000,000'
 	static prettifyNumber(n):String {
 		if(n <= 0)
 			return '0';
@@ -19,6 +23,7 @@ class HelperFunctions {
 		return temp;
 	}
 
+        // Generates a unique 32-character identifier
 	static generateId():String {
 	    var id = '';
 

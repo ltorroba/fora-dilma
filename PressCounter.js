@@ -35,12 +35,14 @@ class PressCounter extends Component {
 		// Update artificial state
 		let newState = {...scope.state};
 
-		var presses_artificial_average = ttg >= 1 ? (newState.presses - newState.presses_artificial) / ttg : newState.presses - newState.presses_artificial;
+		var presses_artificial_average = ttg >= 1 ? (newState.presses - newState.presses_artificial) 
+                    / ttg : newState.presses - newState.presses_artificial;
 		var artificial_increment = Math.floor(Math.random() * 2 + presses_artificial_average - 1);
 		
 		artificial_increment = artificial_increment > 0 ? artificial_increment : 0;
 
-		newState.presses_artificial += newState.presses_artificial < newState.presses ? artificial_increment : 0;
+		newState.presses_artificial += newState.presses_artificial < newState.presses ? 
+                    artificial_increment : 0;
 
 		scope.setState(newState);
 	}
@@ -49,7 +51,8 @@ class PressCounter extends Component {
 		return (
 			<View style={styles.hitsContainer}>
 				<Text style={styles.hitsText}>
-	                { HelperFunctions.prettifyNumber(this.state.presses_artificial + this.state.localPresses) }
+	                { HelperFunctions.prettifyNumber(this.state.presses_artificial + 
+                            this.state.localPresses) }
 	            </Text>
             </View>
 		);

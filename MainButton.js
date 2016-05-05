@@ -38,13 +38,17 @@ class MainButton extends Component {
         return (
             <View>
                 <Image source={ buttonPressed } style={{ width: 0, height: 0, opacity: 1 }} />
-                <TouchableWithoutFeedback onPressIn={ () => this.toggleButton(true) } onPressOut={ () => this.toggleButton(false) }>
-                    <Image source={ this.state.pressed ? buttonPressed : buttonNormal } style={styles.button}/>
+                <TouchableWithoutFeedback onPressIn={ () => this.toggleButton(true) } onPressOut={ () => 
+                    this.toggleButton(false) }>
+                    <Image source={ this.state.pressed ? buttonPressed : buttonNormal } 
+                        style={styles.button}/>
                 </TouchableWithoutFeedback>
             </View>
         );
     }
 
+    // Toggles the state of the 'Fora' button. Takes in one parameter, the state: true when pressed, 
+    // false when released.
     toggleButton(s:Boolean) {
         let newState = {...this.state};
         newState.pressed = s;

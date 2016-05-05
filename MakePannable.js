@@ -7,6 +7,7 @@ import React, {
     View
 } from 'react-native';
 
+// ES6-style decorator to make an object pannable
 const makePannable = BaseComponent => {
     return class extends Component {
         constructor(props, context) {

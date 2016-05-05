@@ -89,7 +89,9 @@ class ForaDilma extends Component {
     }
 
     setupSync() {
-        if(this.state.statsPane && this.state.pressCounter && this.state.levelBar && this.state.id && !this.state.syncSetup) {
+        // Begin syncing once everything's setup
+        if(this.state.statsPane && this.state.pressCounter && this.state.levelBar && this.state.id && 
+                !this.state.syncSetup) {
             // Initial sync
             this.sync(this.state.pressCounter, this.state.statsPane, this);
 
@@ -101,6 +103,7 @@ class ForaDilma extends Component {
         }
     }
 
+    // Sync statistics with server - called periodically
     async sync(pc, sp, r) {
         if(!r.state.error) {
             // Transfer current presses to temporary store
@@ -130,7 +133,8 @@ class ForaDilma extends Component {
                 } else {
                     // Update counter, taking into consideration any queued presses
                     let newPcState = {...pc.state};
-                    newPcState.presses = parseInt(JSON.parse(responseText).presses) - newPcState.lastPressBatch;
+                    newPcState.presses = parseInt(JSON.parse(responseText).presses) - 
+                        newPcState.lastPressBatch;
                     newPcState.pressesSinceLastSync = newPcState.queuedPresses;
                     newPcState.lastUpdate = Date.now();
 
@@ -161,7 +165,9 @@ class ForaDilma extends Component {
         }
     }
 
+    // Called on every pan movement
     _onPan (state, pivot, orientation) {
+        // Called once, when the pan starts
         if(this.panStart <= -1) {
            this.panStart = Date.now();
            this.panStartY = state.absoluteY;
@@ -197,20 +203,25 @@ class ForaDilma extends Component {
         return (
             <View style={styles.container}>
                 <Animated.View style={{ position: 'absolute', 
-                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, -height] })}}>                                        
-                    <Main fallback={0} target={height} link={this} onPan={ (state) => this._onPan(state, 0, 1) } 
-                        onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
+                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], 
+                                            outputRange: [0, -height] })}}>                                        
+                    <Main fallback={0} target={height} link={this} onPan={ (state) => this._onPan(state, 0, 
+                        1) } onPanEnd={ (state) => this._onPanEnd(state, 0, height) } />
                 </Animated.View>
                 <Animated.View style={{ position: 'absolute', 
-                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [height, 0] }), 
-                                        opacity: this.state.verticalOffset.interpolate({ inputRange: [0, height], outputRange: [0, 1] })}}>
-                    <Statistics link={this} fallback={height} target={0} onPan={ (state) => this._onPan(state, height, -1) } 
-                        onPanEnd={ (state) => this._onPanEnd(state, height, 0) }/>
+                                        top: this.state.verticalOffset.interpolate({ inputRange: [0, height],
+                                            outputRange: [height, 0] }), 
+                                        opacity: this.state.verticalOffset.interpolate({ inputRange: [0, 
+                                            height], outputRange: [0, 1] })}}>
+                    <Statistics link={this} fallback={height} target={0} onPan={ (state) => 
+                        this._onPan(state, height, -1) } onPanEnd={ (state) => this._onPanEnd(state, 
+                            height, 0) }/>
                 </Animated.View>
             </View>
         );
     }
 
+    // Trigger an error message and stop syncing
     die(message, rootScope) {
         rootScope.state.error = true;
 

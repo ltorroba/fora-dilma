@@ -32,7 +32,9 @@ class LevelBar extends Component {
 	render() {
 		return (
 			<View style={ this.getLevelBaseStyle() }> 
-	            <Animated.View style={ this.getLevelHighlightStyle(this.state.progress.interpolate({ inputRange: [0, this.getLevelProgress(this.state.level + 1)], outputRange: [0, width] })) }></Animated.View>
+	            <Animated.View style={ this.getLevelHighlightStyle(this.state.progress.interpolate({ 
+                        inputRange: [0, this.getLevelProgress(this.state.level + 1)], 
+                        outputRange: [0, width] })) }></Animated.View>
 	            { this.getLevelText() }
 	        </View> 
 		);
@@ -65,8 +67,8 @@ class LevelBar extends Component {
 	}
 
 	getLevelProgress(level) {
-		var progress = [0, 1, 10, 25, 50, 100, 250, 500, 1000];
-
+                // Number of clicks to level up, per level
+		var progress = [0, 1, 10, 25, 50, 100, 250, 500, 1000]; 
 		if(level < 9 && level >= 0)
 			return progress[level];
 
@@ -88,14 +90,14 @@ class LevelBar extends Component {
 	}
 
 	getLevelBaseStyle() {
-		var base = {
-	        width: width,
-	        height: 80,
-	        margin: 0,
-	        padding: 0
-	    }
+                var base = {
+                        width: width,
+                        height: 80,
+                        margin: 0,
+                        padding: 0
+                }
 
-	    switch(this.state.level) {
+                switch(this.state.level) {
 			default:
 			case 0: // Alienado político
 				base.backgroundColor = '#7f8c8d'
@@ -130,13 +132,13 @@ class LevelBar extends Component {
 	}
 
 	getLevelHighlightStyle(w) {
-		var base = {
-	        position: 'absolute',
-	        width: w,
-	        height: 80
-    	}
+                var base = {
+                        position: 'absolute',
+                        width: w,
+                        height: 80
+                }
 
-    	switch(this.state.level) {
+                switch(this.state.level) {
 			default:
 			case 0: // Alienado político
 				base.backgroundColor = '#95a5a6'
@@ -183,6 +185,7 @@ class LevelBar extends Component {
 		return base;
 	}
 
+        // Generates JSX element that goes in the level bar
 	getLevelText() {
 		switch(this.state.level) {
 			default:
