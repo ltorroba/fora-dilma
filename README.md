@@ -51,8 +51,9 @@ it or use it as a learning resource.
 
 ## Credits
 
-Anttoni Pykalisto (@PotatoProgrammer) - Original idea
-Breno Salgado (@breno12321) - More ideas, graphics 
+* Breno Salgado ([@breno12321](https://github.com/breno12321)): Ideas, graphics 
+* Anttoni Pykalisto ([@PotatoProgrammer](https://github.com/PotatoProgrammer)): Original idea 
+* "MhackerX" ([@mhackerx](https://github.com/mhackerx)): Pointing out and helping with some bug fixes
 
 ## License
 
