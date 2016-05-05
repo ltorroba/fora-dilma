@@ -187,23 +187,23 @@ class LevelBar extends Component {
 		switch(this.state.level) {
 			default:
 			case 0:
-				return (<Text style={ this.getLevelTextStyle() }>ALIENADO POLÍTICO <Emoji name="alien" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>ALIENADO POLÍTICO <Emoji name='alien' /></Text>);
 			case 1:
-				return (<Text style={ this.getLevelTextStyle() }>PROTESTANTE DE SOFA <Emoji name="sleeping" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>PROTESTANTE DE SOFA <Emoji name='sleeping' /></Text>);
 			case 2:
-				return (<Text style={ this.getLevelTextStyle() }>ATIVISTA DE FACEBOOK <Emoji name="+1" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>ATIVISTA DE FACEBOOK <Emoji name='+1' /></Text>);
 			case 3:
-				return (<Text style={ this.getLevelTextStyle() }>COXINHA <Emoji name="poultry_leg" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>COXINHA <Emoji name='poultry_leg' /></Text>);
 			case 4:
-				return (<Text style={ this.getLevelTextStyle() }>PANELISTA MASTER <Emoji name="egg" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>PANELISTA MASTER <Emoji name='egg' /></Text>);
 			case 5:
-				return (<Text style={ this.getLevelTextStyle() }>SAUDADOR DA MANDIOCA <Emoji name="raised_hands" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>SAUDADOR DA MANDIOCA <Emoji name='raised_hands' /></Text>);
 			case 6:
-				return (<Text style={ this.getLevelTextStyle() }>CAÇA-PETRALHAS <Emoji name="smiling_imp" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>CAÇA-PETRALHAS <Emoji name='smiling_imp' /></Text>);
 			case 7:
-				return (<Text style={ this.getLevelTextStyle() }>JAPONÊS DA FEDERAL <Emoji name="cop" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>JAPONÊS DA FEDERAL <Emoji name='cop' /></Text>);
 			case 8:
-				return (<Text style={ this.getLevelTextStyle() }>SÉRGIO MORO JR. <Emoji name="star2" /></Text>);
+				return (<Text style={ this.getLevelTextStyle() }>SÉRGIO MORO JR. <Emoji name='star2' /></Text>);
 		}
 	}
 }

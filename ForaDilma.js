@@ -13,7 +13,7 @@ import React, {
 // Additional modules
 import Orientation from 'react-native-orientation';
 import Storage from 'react-native-storage';
-import codePush from "react-native-code-push";
+import codePush from 'react-native-code-push';
 
 // Local modules
 import styles from './styles';
@@ -216,7 +216,7 @@ class ForaDilma extends Component {
 
         Alert.alert('Erro!', message, [
             { text: 'Culpa da Dilma!', onPress: () => { 
-                console.log("OK pressed");
+                console.log('OK pressed');
             } }
         ]);
     }
