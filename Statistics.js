@@ -1,17 +1,18 @@
 'use strict';
 
-var React = require('react-native');
-var {
-	Component,
-	Image,
-	Text,
-	Dimensions,
-	View
-} = React;
+// Core modules
+import React, {
+    Component,
+    Image,
+    Text,
+    Dimensions,
+    View
+} from 'react-native';
 
+// Local modules
 import styles from './styles';
-var HelperFunctions = require('./HelperFunctions');
-const makePannable = require('./MakePannable.js');
+import HelperFunctions from './HelperFunctions';
+import makePannable from './MakePannable';
 
 var { height, width } = Dimensions.get('window');
 

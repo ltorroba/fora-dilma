@@ -1,14 +1,15 @@
 'use strict';
 
-var React = require('react-native');
-var {
-	Text,
-	View,
-	Component
-} = React;
+// Core modules
+import React, {
+    Text,
+    View,
+    Component
+} from 'react-native';
 
+// Local modules
 import styles from './styles';
-var HelperFunctions = require('./HelperFunctions');
+import HelperFunctions from './HelperFunctions';
 
 class PressCounter extends Component {
 	constructor() {

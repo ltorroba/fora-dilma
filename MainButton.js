@@ -1,16 +1,20 @@
 'use strict';
 
-var React = require('react-native');
-var { 
+// Core modules
+import React, { 
     Component,
     TouchableWithoutFeedback,
     Image,
     View
-} = React;
+} from 'react-native';
 
+// Additional modules
 var Sound = require('react-native-sound');
-var soundActive = false;
 
+// Local modules
+import styles from './styles';
+
+var soundActive = false;
 var ForaShout = new Sound('fora.mp3', Sound.MAIN_BUNDLE, (error) => {
     if(error) {
         console.log('Failed to load sound', error);
@@ -18,8 +22,6 @@ var ForaShout = new Sound('fora.mp3', Sound.MAIN_BUNDLE, (error) => {
         console.log('Successfully loaded sound');
     }  
 });
-
-import styles from './styles';
 
 var buttonNormal = require('./res/Button.png');
 var buttonPressed = require('./res/ButtonPressed.png');

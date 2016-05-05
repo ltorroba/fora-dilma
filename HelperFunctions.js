@@ -1,10 +1,5 @@
 'use strict';
 
-var React = require('react-native');
-var {
-	Component
-} = React;
-
 class HelperFunctions {
 	static prettifyNumber(n):String {
 		if(n <= 0)

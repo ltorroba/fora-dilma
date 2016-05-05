@@ -1,11 +1,11 @@
 'use strict';
 
-var React = require('react-native');
-var {
-	Component,
-	PanResponder,
-	View
-} = React;
+// Core modules
+import React, {
+    Component,
+    PanResponder,
+    View
+} from 'react-native';
 
 const makePannable = BaseComponent => {
     return class extends Component {

@@ -1,19 +1,22 @@
 'use strict';
 
-var React = require('react-native');
-var Emoji = require('react-native-emoji');
-var {
-	Component,
-	View,
-	Text,
-	Dimensions,
-	Animated,
-	Easing
-} = React;
+// Core modules
+import React, {
+    Component,
+    View,
+    Text,
+    Dimensions,
+    Animated,
+    Easing
+} from 'react-native';
+
+// Additional modules
+import Emoji from 'react-native-emoji';
+
+// Local modules
+import styles from './styles';
 
 var { height, width } = Dimensions.get('window');
-
-import styles from './styles';
 
 class LevelBar extends Component {
 	constructor() {

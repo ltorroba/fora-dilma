@@ -1,10 +1,9 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React , {
     StyleSheet,
     Dimensions
-} = React;
+} from 'react-native';
 
 var { height, width } = Dimensions.get('window');
 

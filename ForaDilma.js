@@ -1,26 +1,25 @@
 'use strict';
 
-var React = require('react-native');
-var {
+// Core modules
+import React, {
     Component,
     Animated,
     View,
     Dimensions,
-    Text,
-    Image,
     Easing,
     Alert
-} = React;
-var Orientation = require('react-native-orientation');
+} from 'react-native';
 
-import styles from './styles';
+// Additional modules
+import Orientation from 'react-native-orientation';
 import Storage from 'react-native-storage';
 import codePush from "react-native-code-push";
 
-var Main = require('./MainPane');
-var Statistics = require('./Statistics');
-
-var HelperFunctions = require('./HelperFunctions');
+// Local modules
+import styles from './styles';
+import Main from './MainPane';
+import Statistics from './Statistics';
+import HelperFunctions from './HelperFunctions';
 
 var { height, width } = Dimensions.get('window');
 

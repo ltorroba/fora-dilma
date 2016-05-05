@@ -1,18 +1,17 @@
 'use strict';
 
-var React = require('react-native');
-var {
-	Component,
-	View,
-	Image
-} = React;
+import React, {
+    Component,
+    View,
+    Image
+} from 'react-native';
 
+// Local modules
 import styles from './styles';
-const makePannable = require('./MakePannable');
-
-var MainButton = require('./MainButton');
-var PressCounter = require('./PressCounter');
-var LevelBar = require('./LevelBar');
+import makePannable from './MakePannable';
+import MainButton from './MainButton';
+import PressCounter from './PressCounter';
+import LevelBar from './LevelBar';
 
 @makePannable
 class MainPane extends Component {
